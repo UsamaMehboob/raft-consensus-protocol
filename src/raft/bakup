@@ -1,0 +1,896 @@
+package raft
+
+import (
+	"fmt"
+	"labrpc"
+	"math/rand"
+	"sync"
+	"time"
+)
+
+//
+// this is an outline of the API that raft must expose to
+// the service (or tester). see comments below for
+// each of these functions for more details.
+//
+// rf = Make(...)
+//   create a new Raft server.
+// rf.Start(command interface{}) (index, term, isleader)
+//   start agreement on a new log entry
+// rf.GetState() (term, isLeader)
+//   ask a Raft for its current term, and whether it thinks it is leader
+// ApplyMsg
+//   each time a new entry is committed to the log, each Raft peer
+//   should send an ApplyMsg to the service (or tester)
+//   in the same server.
+//
+
+// import "bytes"
+// import "labgob"
+
+//
+// as each Raft peer becomes aware that successive log entries are
+// committed, the peer should send an ApplyMsg to the service (or
+// tester) on the same server, via the applyCh passed to Make(). set
+// CommandValid to true to indicate that the ApplyMsg contains a newly
+// committed log entry.
+//
+// in Lab 3 you'll want to send other kinds of messages (e.g.,
+// snapshots) on the applyCh; at that point you can add fields to
+// ApplyMsg, but set CommandValid to false for these other uses.
+//
+type ApplyMsg struct {
+	CommandValid bool
+	Command      interface{}
+	CommandIndex int
+}
+
+type LogEntry struct {
+	Command             interface{}
+	CommandIndexInlog   int
+	CommandTerm         int // term when entry was received by the leader.
+}
+
+//invoked by the leader to replicate log entries. Also serves as a heartbeat.
+type AppendEntriesRequest struct {
+	Term int //leaders term
+	LeaderId int // so followers can redirect client requests.
+	PrevLogIndex int // index of log entries immediately preceding new ones.
+	PrevLogTerm  int  //term of PrevLogIndex entry.
+	LogEntries []LogEntry // log entries to store. empty in case of heartbeats.
+	LeaderCommit int  // leader's commit index.
+
+}
+
+type AppendEntriesReply struct {
+	Term int //currentTerm, for leader to update itself.
+	Success bool //true if follower contained entry matching prevLogIndex and prevLogTerm
+}
+
+
+//
+// A Go object implementing a single Raft peer.
+//
+type Raft struct {
+	mu        sync.Mutex          // Lock to protect shared access to this peer's state
+	peers     []*labrpc.ClientEnd // RPC end points of all peers
+	persister *Persister          // Object to hold this peer's persisted state
+	me        int                 // this peer's index into peers[]
+
+	// persistent state - all servers
+	currentTerm int               // latest term server has seen, increases monotonically from 0 - >
+	votedFor    int               // candidateID who received the vote.
+	log         []LogEntry
+
+	//volatile state - all servers
+	commitIndex int               // index of highest log entry known to be committed.
+	lastApplied int               // highest log entry applied to state machine.
+
+	//volatile state - leaders
+	nextIndex   []int             // index of next log entry to send to that server. -> init = lastlogint + 1
+	matchIndex  []int             // index of highest log entry known to be replicated on server. ->  init = 0
+
+	electiontimeout int           //TODO not sure if I should put it here.
+	leaderid    int               //TODO update leaderid when you get append heartbeat from someone. me in case of self
+	iscandidate int
+	isfollower  int
+	isleader	int
+
+
+	// Your data here (2A, 2B, 2C).
+	// Look at the paper's Figure 2 for a description of what
+	// state a Raft server must maintain.
+
+}
+
+
+
+// return currentTerm and whether this server
+// believes it is the leader.
+func (rf *Raft) GetState() (int, bool) {
+
+	var term int
+	var isleader bool
+	// Your code here (2A).
+	term = rf.currentTerm
+	isleader = false
+	if (rf.isleader == 1) { isleader = true}
+
+	return term, isleader
+}
+
+
+//
+// save Raft's persistent state to stable storage,
+// where it can later be retrieved after a crash and restart.
+// see paper's Figure 2 for a description of what should be persistent.
+//
+func (rf *Raft) persist() {
+	// Your code here (2C).
+	// Example:
+	// w := new(bytes.Buffer)
+	// e := labgob.NewEncoder(w)
+	// e.Encode(rf.xxx)
+	// e.Encode(rf.yyy)
+	// data := w.Bytes()
+	// rf.persister.SaveRaftState(data)
+}
+
+
+//
+// restore previously persisted state.
+//
+func (rf *Raft) readPersist(data []byte) {
+	if data == nil || len(data) < 1 { // bootstrap without any state?
+		return
+	}
+	// Your code here (2C).
+	// Example:
+	// r := bytes.NewBuffer(data)
+	// d := labgob.NewDecoder(r)
+	// var xxx
+	// var yyy
+	// if d.Decode(&xxx) != nil ||
+	//    d.Decode(&yyy) != nil {
+	//   error...
+	// } else {
+	//   rf.xxx = xxx
+	//   rf.yyy = yyy
+	// }
+}
+
+
+//
+// example RequestVote RPC arguments structure.
+// field names must start with capital letters!
+//
+type RequestVoteArgs struct {
+	// Your data here (2A, 2B).
+	Term          int     // candidate's term
+	CandidateId   int     // candidate requesting vote
+	LastLogIndex  int     // index of candidate's last log entry
+	LastLogTerm   int     // term of candidate's last log entry.
+}
+
+//
+// example RequestVote RPC reply structure.
+// field names must start with capital letters!
+//
+type RequestVoteReply struct {
+	// Your data here (2A).
+	Term          int // currentTerm, for candidate to update itself.
+	VoteGranted   bool // true means candidate received vote.
+}
+
+func(rf * Raft) sendAppendEntriesToAll(){
+
+	//type AppendEntriesRequest struct {
+	//	Term int //leaders term
+	//	LeaderId int // so followers can redirect client requests.
+	//	PrevLogIndex int // index of log entries immediately preceding new ones.
+	//	PrevLogTerm  int  //term of PrevLogIndex entry.
+	//	LogEntries []LogEntry // log entries to store. empty in case of heartbeats.
+	//	LeaderCommit int  // leader's commit index.
+	//
+	//}
+	//todo check if prevLogTerm:-1 should be different in case len(log) = 0 and when we have entries in log.
+	requestAppendEntries:=AppendEntriesRequest{Term:rf.currentTerm, LeaderId:rf.me, PrevLogIndex:rf.lastApplied, PrevLogTerm:rf.currentTerm-1}
+	replyAppendEntries :=AppendEntriesReply{}
+	fmt.Printf("in sendAppendEntriesToAll by leader(%d)\n", rf.me)
+	for i, _ := range rf.peers {
+		if ( i!=rf.me ){
+			rpcStatus:=rf.sendAppendEntries(i, &requestAppendEntries, &replyAppendEntries)
+			fmt.Printf("rpcStatus[%d] for sendAppendEntries. =%t\n",i,rpcStatus)
+			rf.handleAppendEntriesReply(&requestAppendEntries,&replyAppendEntries,i)
+			//todo if you get rejected, immediately step down and not update nextindex
+		}
+
+	}
+
+}
+
+//HeartBeats
+func (rf * Raft) periodicAppenEntries(){
+	//todo one way to implement is to launch it in a go-routine for every peer.
+	// and send periodic heartbeats if is leader flag is set.
+	for true {
+		//time.Sleep(1*time.Millisecond)
+
+		// only if it is a leader.
+		_, isLeader:=rf.GetState();
+		//fmt.Println("**************************************************")
+		if  isLeader == true {
+			fmt.Printf("holy shit I (%d) am a leader. \n", rf.me)
+
+			rf.sendAppendEntriesToAll() //todo uncomment it.
+			//time.Sleep(time.Duration(rf.electiontimeout + 100)*time.Millisecond)
+			time.Sleep(time.Duration(rf.electiontimeout/3) * time.Millisecond)
+
+		}
+
+	}
+
+}
+
+
+//func (rf * Raft) periodicAppenEntries2(){
+//
+//	//todo one way to implement is to launch it in a go-routine for every peer.
+//	// and send periodic heartbeats if is leader flag is set.
+//	for true {
+//		time.Sleep(1*time.Second)
+//		fmt.Println("FUCK THIS SHIT")
+//	}
+//	fmt.Println("HANJI2222")
+//	//for true {
+//	//	// only if it is a leader.
+//	//	_, isLeader:=rf.GetState();
+//	//	//fmt.Println("**************************************************")
+//	//	if  isLeader == true {
+//	//		fmt.Printf("holy shit I (%d) am a leader. \n", rf.me)
+//	//
+//	//		rf.sendAppendEntriesToAll() //todo uncomment it.
+//	//		//time.Sleep(time.Duration(rf.electiontimeout + 100)*time.Millisecond)
+//	//		time.Sleep(time.Duration(rf.electiontimeout/3) * time.Millisecond)
+//	//		//todo time.sleep (rf.electiontimeout/3) // no more than 10 times per second.
+//	//	}
+//	//
+//	//}
+//
+//}
+
+//Write an AppendEntries RPC handler method that resets the election timeout so that
+//other servers don't step forward as leaders when one has already been elected.
+func (rf *Raft) AppendEntries(args *AppendEntriesRequest, reply *AppendEntriesReply){
+	//TODO if leader. periodically send append entries.
+	fmt.Printf("I (%d) have recevied AppendEntries from a leader(%d) \n", rf.me, args.LeaderId)
+
+	if ( rf.isfollower==1 ){
+		//if not leader
+		stattus:=rf.acceptAppendEntries(args,reply) //todo return true only if it returns true.
+		reply.Term = rf.currentTerm
+		if ( stattus == true ){
+			reply.Success = true
+
+		} else {
+			fmt.Println("FUCK off I am not gonna apply the entries you sent. ")
+			reply.Success = false
+		}
+
+		rf.genRandTimeout()
+	}
+
+	_, isLeader:= rf.GetState()
+	if (isLeader == true){
+		//todo write these periodic entries somewhere else where leader starts it.
+		// problem is for every append entriy it is gonna start go routing
+		// this is wrong. as leader can send multiple appendEntries .
+		//go rf.periodicAppenEntries() //vs periodicAppendEntries(rf)?
+	}
+
+}
+
+
+
+
+
+//tell the leader that their log matches the leader’s log up to and including
+// the prevLogIndex included in the AppendEntries arguments.
+func (rf * Raft) insertEntriesAtIndexInLog(at int, from int, args *AppendEntriesRequest ){
+	if ( len(rf.log)>at ){
+		rf.log[at].CommandTerm = args.LogEntries[from].CommandTerm
+		rf.log[at].CommandIndexInlog = args.LogEntries[from].CommandIndexInlog
+		rf.log[at].Command = args.LogEntries[from].Command
+		fmt.Printf("command inserted = %s, command term = %d\n", rf.log[at].Command, rf.log[at].CommandTerm )
+
+	}else{
+		rf.log = append(rf.log, args.LogEntries[from])
+		fmt.Printf("command appended = %s, command term = %d\n", rf.log[at].Command, rf.log[at].CommandTerm)
+
+	}
+	rf.lastApplied = at
+	if ( args.LeaderCommit > rf.commitIndex ){
+		//commitIndex = min ( LeaderCommit, index of last new entry )
+		if (at > args.LeaderCommit){
+			rf.commitIndex = args.LeaderCommit
+		} else if (args.LeaderCommit > at){
+			rf.commitIndex = at
+		}
+	}
+
+}
+
+
+func (rf * Raft) handleAppendEntriesReply(args *AppendEntriesRequest, reply *AppendEntriesReply, serverId int, ) bool{
+
+	//compare the current term with the term you sent in your original RPC.
+	// If the two are different, drop the reply and return
+	fmt.Printf("I Leader (%d) am gonna handleAppendEntriesReply from follower (%d)\n", rf.me, serverId)
+	if (rf.currentTerm!=args.Term){
+		fmt.Printf("Reject reply as rf.currentTerm(%d)!=args.Term(%d)\n",rf.currentTerm,args.Term)
+		//todo not sure if the original term that was sent is still retained in the args.
+		return false
+	}
+
+	//todo implement where follower does not have entries what you think, decrement next index
+	// and try again for that bitch.
+
+	if (reply.Term > rf.currentTerm){
+		fmt.Printf("I am gonna step down as reply.Term(%d) > rf.currentTerm(%d) \n",reply.Term,rf.currentTerm)
+		rf.currentTerm = reply.Term
+		rf.isfollower = 1
+		rf.iscandidate = 0
+		rf.isleader = 1
+	}
+
+	//server id reflect the server to whom i sent the args request and he has replied to me.
+	if (reply.Term == rf.currentTerm){
+		fmt.Printf("Good:: reply.Term(%d) == rf.currentTerm(%d) \n",reply.Term,rf.currentTerm)
+		fmt.Printf("lets see = %d\n", rf.matchIndex[0])
+		//means that follower has replicated all the entries that I sent.
+		rf.matchIndex[serverId]=args.PrevLogIndex + len(args.LogEntries)
+		rf.nextIndex[serverId]=args.PrevLogIndex + len(args.LogEntries) + 1 //todo read it once more
+
+		//checking commiting everytime we update matchindex.
+		rf.updateCommitIndexInLeader()
+	}
+
+	return false
+}
+
+
+func (rf * Raft) acceptAppendEntries(args *AppendEntriesRequest, reply *AppendEntriesReply) bool {
+	conflictingIndex:=-1
+	offset:=0
+	if (len(rf.log)>0){
+		fmt.Printf(" rf.log[%d].CommandTerm(%d) should == args.PrevLogTerm(%d)\n",
+			rf.lastApplied, rf.log[rf.lastApplied].CommandTerm, args.PrevLogTerm)
+		if (rf.log[rf.lastApplied].CommandTerm != args.PrevLogTerm){
+			return false
+		}
+
+	}
+
+	if (rf.currentTerm > args.Term){
+		fmt.Printf("I am Follwer(%d) and I dont acceptAppendEntries from leader(%d) as rf.currentTerm(%d) > args.Term(%d)\n",
+			rf.me, args.LeaderId,rf.currentTerm, args.Term)
+		return false
+	}
+
+	rf.genRandTimeout() // I wont reseet if term is outdated.
+		if (rf.lastApplied >= args.PrevLogIndex ) {
+			fmt.Printf("Good, rf.lastApplied(%d) >= args.PrevLogIndex(%d)\n", rf.lastApplied, args.PrevLogIndex)
+			for i := 0; i < len(args.LogEntries); i++ {
+				if ( args.PrevLogIndex+i+1>rf.lastApplied ) {
+					//we dont have an element at that index;; truncate.
+					conflictingIndex = args.PrevLogIndex+i+1
+					rf.lastApplied = args.PrevLogIndex+i
+					break;
+				}
+
+				if ( rf.log[args.PrevLogIndex+i+1].CommandTerm != args.Term ){
+					//found conflicting entry, same index but different term;; truncate.
+					conflictingIndex = args.PrevLogIndex+i+1
+					rf.lastApplied = args.PrevLogIndex+i
+					break;
+				}
+				offset = offset+1
+
+			}
+			//now replace all the entries starting at conflicting index
+			if (conflictingIndex != -1 ){
+				for i := 0; i < len(args.LogEntries)-offset; i++ {
+					rf.insertEntriesAtIndexInLog(conflictingIndex+i, i+offset, args  )
+				}
+
+			}
+
+			//if (rf.currentTerm == args.Term ){
+			//	fmt.Printf(" HELP:: I was gonna reply True after accepting append entries but unfortunately it seems like" +
+			//		"I have applied entries assuming wrong term. Help me. \n")
+			//}
+			fmt.Printf("I am a follower(%d) and I have accepted AppendEntries\n", rf.me)
+			return true
+
+		}
+	fmt.Printf("I am a follower(%d) and I dont acceptAppendEntries as rf.lastApplied(%d) < args.PrevLogIndex(%d)\n",rf.me,rf.lastApplied, args.PrevLogIndex)
+	return false
+
+}
+
+func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesRequest, reply *AppendEntriesReply) bool {
+	ok := rf.peers[server].Call("Raft.AppendEntries", args, reply)
+	return ok
+}
+
+
+//
+// example RequestVote RPC handler.
+//
+
+func (rf *Raft) RecieveRequestVote(args *RequestVoteArgs, reply *RequestVoteReply){
+	//paper section 5.4 describe if my log is more upto date than the candidate, then reject it.
+	fmt.Printf("received request from a leader to vote for him. I am = %d\n,", rf.me)
+	fmt.Println(args)
+
+	//if ( args.LastLogTerm < rf.log[rf.lastApplied].CommandTerm ){ todo see which one works.
+	if (args.LastLogTerm < rf.currentTerm){
+		fmt.Printf("Not voting because. args.LastLogTerm(%d) < rf.currentTerm(%d)\n", args.LastLogTerm, rf.currentTerm)
+		reply.Term = rf.currentTerm
+		reply.VoteGranted = false
+	}
+
+	if (len(rf.log)>0) {
+		fmt.Println("logLength is > 0")
+		//checking for more uptodate log
+		if ( args.LastLogTerm == rf.log[rf.lastApplied].CommandTerm )&& (rf.log[rf.lastApplied].CommandIndexInlog > args.LastLogIndex ) {
+			fmt.Printf("Not voting because. args.LastLogindex(%d) < last command idx(%d)\n", args.LastLogIndex, rf.log[rf.lastApplied].CommandIndexInlog)
+			reply.Term = rf.currentTerm
+			reply.VoteGranted = false
+		}
+	}
+
+	//receiver implementation by monster from fig2.
+	if ( args.Term < rf.currentTerm ){
+		fmt.Printf("Not voting because. args.Term(%d) < rf.currentTerm(%d)\n", args.Term, rf.currentTerm)
+		reply.Term = rf.currentTerm
+		reply.VoteGranted = false
+	}
+
+
+	if (args.Term > rf.currentTerm){
+		fmt.Printf("Good:: args.Term(%d) > rf.currentTerm(%d)\n", args.Term, rf.currentTerm)
+		fmt.Printf("Should be args.LastLogIndex(%d)>=rf.lastApplied(%d): args.LastLogTerm(%d) >= " +
+			"rf.currentTerm(%d)\n", args.LastLogIndex, rf.lastApplied, args.LastLogTerm, rf.currentTerm)
+		//if (rf.votedFor != -1 ){
+		if ((args.LastLogIndex >= rf.lastApplied) && (args.LastLogTerm >= rf.currentTerm) ){
+			fmt.Println("Gonna vote for him. ")
+			// I have already voted in current term but a new RPC comes with greater term.
+			rf.currentTerm = args.Term
+			reply.VoteGranted = true
+			reply.Term = args.Term
+			rf.votedFor =args.CandidateId
+			rf.genRandTimeout()
+
+			rf.isfollower = 1
+			if (rf.isleader ==1 ){
+				//todo if it is correct, cuz I am stepping down as a leader while voting for another
+				// . There was something mentioned in the paper. read that
+				fmt.Printf("Motherfucker, I am gonna step down. %d on term %d. I was a leader" +
+					" in previous term\n", rf.me, rf.currentTerm)
+				rf.isleader = 0
+
+			}
+			rf.iscandidate = 0
+			// student guide says to reset when you grant vote
+		}
+
+	}
+
+}
+
+func (rf *Raft) LeaderSendRequestVotes(args *RequestVoteArgs, reply *RequestVoteReply ){
+	fmt.Printf(" I am a candidate ( %d) and gonna request for votes. \n", rf.me)
+	if (rf.iscandidate == 1 ) {
+		NumVotes:=0
+		VotedNeeded:= len(rf.peers)/2
+		for i, _ := range rf.peers {
+			//if (rf.iscandidate == 1 ) {
+
+			if (i!=rf.me ){
+				voteRequestStatus:=rf.sendRequestVote(i, args, reply)
+				fmt.Printf("My (%d) voteRequestStatus from %d is = %t\n", rf.me, i, voteRequestStatus )
+
+				if (reply.VoteGranted == true) {
+					NumVotes = NumVotes + 1
+					fmt.Printf("My (%d) Votes are =%d\n", rf.me, NumVotes )
+					if (reply.Term!=rf.currentTerm){
+						fmt.Errorf("Kind of weired, that he(%d) gave me vote but reply.Term(%d)!=currentTerm(%d)",i,reply.Term,rf.currentTerm)
+					}
+				} else {
+					fmt.Printf("Follower(%d) did not grant me(%d) vote, currentTerm=%d, reply.Term=%d, reply.Vote=%t..aborting election !!! \n",
+						i,rf.me, rf.currentTerm, reply.Term, reply.VoteGranted)
+					if (reply.Term > rf.currentTerm ){
+						fmt.Printf("From Server (%d): reply Term %d > current.Term %d I am stepping down.  !!! \n",
+							i, reply.Term, rf.currentTerm)
+						//means there is some else leader, I should step down
+						rf.currentTerm = reply.Term
+						rf.iscandidate = 0
+						rf.isfollower = 1
+						rf.isleader = 0
+
+						break;
+
+					}
+
+				}
+
+
+			}
+
+
+		}
+		if (rf.isfollower == 1){
+			fmt.Printf("SHITT, I lost election, either some voter gave me dick or someone received appendEntries. \n")
+			if rf.iscandidate == 1 {
+				panic("candidate id should be zero, as I have ben overturned. ")
+			}
+
+		} else{
+			fmt.Printf("me (%d) has got %d votes and I needed %d\n", rf.me, NumVotes, VotedNeeded)
+			if ( NumVotes >=VotedNeeded ){
+				rf.isfollower =0
+				rf.iscandidate = 0
+				rf.isleader = 1
+				rf.leaderid = rf.me
+				rf.sendAppendEntriesToAll()
+
+			}
+		}
+
+	}
+
+}
+
+func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
+	// Your code here (2A, 2B).
+
+
+	//if (rf.isfollower == 1) {
+		//fmt.Printf("I (%d) am a follower received \n ", rf.me)
+		//fmt.Println(args)
+		fmt.Println("----")
+		rf.RecieveRequestVote(args,reply)
+	//}
+
+
+
+	// check if reply than update the term and become follower.
+	// if majority of vote, become a leader.
+	// todo if received AppendEntries from a new leader, become follower.
+
+
+	// rf.leaderid = args.CandidateId //I am stepping down as a leader.
+
+	// todo, if Leader:
+
+
+
+}
+
+
+//
+// example code to send a RequestVote RPC to a server.
+// server is the index of the target server in rf.peers[].
+// expects RPC arguments in args.
+// fills in *reply with RPC reply, so caller should
+// pass &reply.
+// the types of the args and reply passed to Call() must be
+// the same as the types of the arguments declared in the
+// handler function (including whether they are pointers).
+//
+// The labrpc package simulates a lossy network, in which servers
+// may be unreachable, and in which requests and replies may be lost.
+// Call() sends a request and waits for a reply. If a reply arrives
+// within a timeout interval, Call() returns true; otherwise
+// Call() returns false. Thus Call() may not return for a while.
+// A false return can be caused by a dead server, a live server that
+// can't be reached, a lost request, or a lost reply.
+//
+// Call() is guaranteed to return (perhaps after a delay) *except* if the
+// handler function on the server side does not return.  Thus there
+// is no need to implement your own timeouts around Call().
+//
+// look at the comments in ../labrpc/labrpc.go for more details.
+//
+// if you're having trouble getting RPC to work, check that you've
+// capitalized all field names in structs passed over RPC, and
+// that the caller passes the address of the reply struct with &, not
+// the struct itself.
+//
+func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *RequestVoteReply) bool {
+	ok := rf.peers[server].Call("Raft.RequestVote", args, reply)
+	return ok
+}
+
+
+//
+// the service using Raft (e.g. a k/v server) wants to start
+// agreement on the next command to be appended to Raft's log. if this
+// server isn't the leader, returns false. otherwise start the
+// agreement and return immediately. there is no guarantee that this
+// command will ever be committed to the Raft log, since the leader
+// may fail or lose an election. even if the Raft instance has been killed,
+// this function should return gracefully.
+//
+// the first return value is the index that the command will appear at
+// if it's ever committed. the second return value is the current
+// term. the third return value is true if this server believes it is
+// the leader.
+//
+func (rf *Raft) Start(command interface{}) (int, int, bool) {
+	index := -1
+	term := -1
+	isLeader := false
+
+	term, isLeader = rf.GetState()
+	if ( isLeader == true ){
+		var logentry LogEntry;
+		logentry.CommandIndexInlog = rf.lastApplied + 1
+		logentry.Command = command
+		logentry.CommandTerm = term
+		rf.log=append(rf.log, logentry)
+
+		index = logentry.CommandIndexInlog
+	}
+
+	//todo
+	// send parallel AppendRPC and upon majority of replication, update commit index
+	// even if it fails, server tries indefinitely (even if it has responded to client )
+	// appending an entry to leaders log will update its last log index as a result > nextindex
+	// of follower, so start appendRPC.
+	// if success increase nextindex and matchindex for that follower
+	//else decrease index and try again
+	return index, term, isLeader
+}
+
+//
+// the tester calls Kill() when a Raft instance won't
+// be needed again. you are not required to do anything
+// in Kill(), but it might be convenient to (for example)
+// turn off debug output from this instance.
+//
+func (rf *Raft) Kill() {
+	// Your code here, if desired.
+}
+
+//
+// the service or tester wants to create a Raft server. the ports
+// of all the Raft servers (including this one) are in peers[]. this
+// server's port is peers[me]. all the servers' peers[] arrays
+// have the same order. persister is a place for this server to
+// save its persistent state, and also initially holds the most
+// recent saved state, if any. applyCh is a channel on which the
+// tester or service expects Raft to send ApplyMsg messages.
+// Make() must return quickly, so it should start goroutines
+// for any long-running work.
+//
+
+func Make(peers []*labrpc.ClientEnd, me int,
+	persister *Persister, applyCh chan ApplyMsg) *Raft {
+	rf := &Raft{}
+	rf.peers = peers
+	rf.persister = persister
+	rf.me = me
+	rf.genRandTimeout()
+	rf.leaderid = -1
+	rf.isfollower=1
+	rf.lastApplied = -1
+	rf.matchIndex = make([]int, len(rf.peers))
+	rf.nextIndex = make([]int, len(rf.peers))
+
+	for i, _ := range rf.nextIndex {
+		rf.nextIndex[i]  = -1
+		rf.matchIndex[i] = -1
+	}
+	fmt.Println("JUST ENDING111")
+	//Your initialization code here (2A, 2B, 2C).
+	go rf.leaderElection(me)
+	go rf.periodicAppenEntries()
+
+	//go rf.periodicAppenEntries2()
+
+	// initialize from state persisted before a crash
+	rf.readPersist(persister.ReadRaftState())
+
+	fmt.Printf("***************called make me = %d and peerlen = %d term = %d\n",
+		rf.me, len(peers), rf.currentTerm, )
+	//time.Sleep(2*time.Second)
+	fmt.Println("JUST ENDING")
+	return rf
+}
+func (rf * Raft ) genRandTimeout() int {
+	// function to generate a random timeout for each peer.
+	baseValueElection:=600
+
+	rand.Seed(time.Now().UnixNano())
+	variableValue:=rand.Intn(50)
+	rf.electiontimeout = baseValueElection + variableValue
+
+	fmt.Printf(" electiontimeout=%d , serverid = %d \n", rf.electiontimeout, rf.me)
+	return 0
+}
+
+func (rf * Raft ) leaderElection( me int ){
+	fmt.Printf("---test--FROM %d %d \n", rf.me, rf.isfollower)
+	for true {
+		//fmt.Println("why I am not timing out 8888888")
+		// if I am a follower todo check if rf.isfollower ==1 should be here or not. Can leader himself timeout and start election?
+		//fmt.Printf("--111-test--FROM %d %d \n", rf.me, rf.isfollower)
+		if (rf.isfollower == 1 ){
+		//	fmt.Printf("--2222-test--FROM %d %d \n", rf.me, rf.isfollower)
+
+			if (rf.electiontimeout == 0 ){
+				rf.iscandidate = 1
+				rf.isfollower = 0
+				fmt.Printf("I (%d) am becoming candidate and starting election = \n", rf.me)
+				//logindex := len(rf.log) // I think you use rf.commitindex etc.
+
+				rf.currentTerm = rf.currentTerm + 1 //increment the term.
+				// vote your self before sending out
+				rf.votedFor = me //vote for self.
+				rf.genRandTimeout()
+				requestVoteArgs:=RequestVoteArgs{Term:rf.currentTerm, CandidateId:me,
+					LastLogIndex:rf.lastApplied, LastLogTerm:rf.currentTerm-1}
+				//fmt.Printf("2. I am debugging  %d\n",rf.log[0].CommandIndexInlog)
+				requestVoteReply:=RequestVoteReply{}
+				rf.LeaderSendRequestVotes(&requestVoteArgs,&requestVoteReply)
+				//rf.RequestVote(&requestVoteArgs,&requestVoteReply)
+
+			}
+
+			time.Sleep(1 * time.Millisecond)
+			rf.electiontimeout = rf.electiontimeout - 1
+//			fmt.Println(rf.electiontimeout)
+
+		}
+
+
+	}
+
+		// 		becomes leader itself or accept other as a leader.
+}
+
+func (rf * Raft)updateCommitIndexInLeader(){
+
+	VotedNeeded:= (len(rf.peers)/2 )+ 1
+	currenCommitindex:=rf.commitIndex
+//	currentAppliedIndex:=rf.lastApplied todo do we need to worry about it here?
+
+	NumVotes:=0
+	majorityOnIndex:=true
+	for majorityOnIndex {
+
+		for i, _ := range rf.nextIndex {
+			if (rf.matchIndex[i]>currenCommitindex ){
+				NumVotes = NumVotes + 1
+			}
+		}
+
+		if (NumVotes >=VotedNeeded){
+			// leader can only update commit index in its own term
+			if (rf.log[currenCommitindex + 1].CommandTerm == rf.currentTerm){
+				majorityOnIndex = true
+				rf.commitIndex = rf.commitIndex + 1
+				currenCommitindex  = rf.commitIndex
+				NumVotes =0 // to check again for another commit index.
+			} else {
+				majorityOnIndex = false
+				fmt.Println("WEIRED :: I have got majority to commit but sadly command does not belong to my term" +
+					"currentCommitindex = %d,rf.log[currenCommitindex + 1].commandTerm = %d, rf.currentTerm=%d ", currenCommitindex,
+					rf.log[currenCommitindex + 1].CommandTerm, rf.currentTerm)
+			}
+
+		} else{
+			majorityOnIndex = false
+		}
+	}
+
+}
+
+
+
+func (rf * Raft) printlog() {
+
+	fmt.Printf("gonna print log for peer =%d\n", rf.me  )
+
+	for i, _ := range rf.log {
+		fmt.Printf("command appended = %s, command term = %d, command index in log = %d \n",
+			rf.log[i].Command, rf.log[i].CommandTerm, rf.log[i].CommandIndexInlog  )
+	}
+
+}
+////////////////////////////////////////////////reduced TEST backup ///////////////////////
+func TestBackup2B(t *testing.T) {
+	servers := 5
+	cfg := make_config(t, servers, false)
+	defer cfg.cleanup()
+
+	cfg.begin("Test (2B): leader backs up quickly over incorrect follower logs")
+
+	cfg.one(rand.Int(), servers, true)
+
+	// put leader and one follower in a partition
+	leader1 := cfg.checkOneLeader()
+	cfg.disconnect((leader1 + 2) % servers)
+	cfg.disconnect((leader1 + 3) % servers)
+	cfg.disconnect((leader1 + 4) % servers)
+
+	//submit lots of commands that won't commit
+	//for i := 0; i < 50; i++ {
+	//	cfg.rafts[leader1].Start(rand.Int())
+	//}
+	cfg.rafts[leader1].Start(999)
+
+
+	time.Sleep(RaftElectionTimeout / 2)
+
+	cfg.disconnect((leader1 + 0) % servers)
+	cfg.disconnect((leader1 + 1) % servers)
+
+	// allow other partition to recover
+	cfg.connect((leader1 + 2) % servers)
+	cfg.connect((leader1 + 3) % servers)
+	cfg.connect((leader1 + 4) % servers)
+
+	//cfg.one(1000, 3, true)
+	//cfg.one(1001, 3, true)
+	//cfg.one(1002, 3, true)
+
+	// lots of successful commands to new group.
+	for i := 0; i < 10; i++ { //original was 50 works at 8 but does not work at 9
+		//RAND:=rand.Int()
+		RAND:=i+2000
+		fmt.Printf("THIS RAND=%d\n", RAND)
+		//cfg.one(rand.Int(), 3, true)
+		cfg.one(RAND, 3, true)
+	}
+////////////////////////////////////////888888//////////////////////////////////////////////
+
+	// now another partitioned leader and one follower
+	leader2 := cfg.checkOneLeader()
+	other := (leader1 + 2) % servers
+	if leader2 == other {
+		other = (leader2 + 1) % servers
+	}
+	cfg.disconnect(other)
+
+	// lots more commands that won't commit
+	//for i := 0; i < 50; i++ {
+	//	cfg.rafts[leader2].Start(rand.Int())
+	//}
+	cfg.rafts[leader2].Start(8596)
+	time.Sleep(RaftElectionTimeout / 2)
+
+	// bring original leader back to life,
+	for i := 0; i < servers; i++ {
+		cfg.disconnect(i)
+	}
+	cfg.connect((leader1 + 0) % servers)
+	cfg.connect((leader1 + 1) % servers)
+	cfg.connect(other)
+
+	// lots of successful commands to new group.
+	//for i := 0; i < 50; i++ {
+	//	cfg.one(rand.Int(), 3, true)
+	//}
+	cfg.one(6666, 3, true)
+	// now everyone
+	//for i := 0; i < servers; i++ {
+	//	cfg.connect(i)
+	//}
+	//cfg.one(rand.Int(), servers, true)
+
+	cfg.end()
+}
+

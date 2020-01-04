@@ -1,0 +1,1811 @@
+Test: unreliable net, many clients (3A) ...
+*********************************ITERATION(0)**************
+
+
+PutAppend did not work for server (0) .. Reply == {false ErrNoKey}!!!
+
+PutAppend did not work for server (2) .. Reply == {true ErrNoKey}!!!
+{Put 0  4446850181468810480}
+Me(4):: raftindex=-1, term=1, isLeader=false
+Me(4)PutAppend, returning False rightway.
+PutAppend did not work for server (0) .. Reply == {true ErrNoKey}!!!
+{Put 2  4411228910934756952}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1}]
+Me(1):: raftindex=4, term=1, isLeader=true
+{Put 0  4446850181468810480}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1}]
+4
+Me(1):: raftindex=5, term=1, isLeader=true
+5
+---------------------------------------------------
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+okay I(1) am gonna send command = {Put 3  3194546619066602912}, to channel
+SENT COMMAND
+
+okay I(1) am gonna send command = {Put 1  71300870958364808}, to channel
+raft server(1) sent entry {true {Put 3  3194546619066602912} 1} on channel
+length of indexChannel = 5,  applyMsgvalCOmmandidx=1
+Apply:: key=3, val= & My(1) db looks like = map[3:]
+true
+raft server(1) sent entry {true {Put 1  71300870958364808} 2} on channel
+length of indexChannel = 5,  applyMsgvalCOmmandidx=2
+Apply:: key=1, val= & My(1) db looks like = map[1: 3:]
+true
+JE SIR==  {Put 1  71300870958364808}
+*** Yeah Same id PutAppend == 71300870958364808
+db[1]= now
+server(4) replied True and PutAppendReply={false OK}
+JE SIR==  {Put 3  3194546619066602912}
+*** Yeah Same id PutAppend == 3194546619066602912
+db[3]= now
+server(0) replied True and PutAppendReply={false OK}
+SENT COMMAND
+
+okay I(1) am gonna send command = {Put 4  3112828873499867471}, to channel
+SENT COMMAND
+
+okay I(1) am gonna send command = {Put 2  4411228910934756952}, to channel
+raft server(1) sent entry {true {Put 4  3112828873499867471} 3} on channel
+length of indexChannel = 5,  applyMsgvalCOmmandidx=3
+Apply:: key=4, val= & My(1) db looks like = map[1: 3: 4:]
+true
+raft server(1) sent entry {true {Put 2  4411228910934756952} 4} on channel
+length of indexChannel = 5,  applyMsgvalCOmmandidx=4
+Apply:: key=2, val= & My(1) db looks like = map[1: 2: 3: 4:]
+true
+JE SIR==  {Put 2  4411228910934756952}
+*** Yeah Same id PutAppend == 4411228910934756952
+db[2]= now
+server(3) replied True and PutAppendReply={false OK}
+JE SIR==  {Put 4  3112828873499867471}
+*** Yeah Same id PutAppend == 3112828873499867471
+db[4]= now
+server(3) replied True and PutAppendReply={false OK}
+SENT COMMAND
+
+okay I(1) am gonna send command = {Put 0  4446850181468810480}, to channel
+SENT COMMAND
+
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+raft server(1) sent entry {true {Put 0  4446850181468810480} 5} on channel
+length of indexChannel = 5,  applyMsgvalCOmmandidx=5
+Apply:: key=0, val= & My(1) db looks like = map[0: 1: 2: 3: 4:]
+true
+JE SIR==  {Put 0  4446850181468810480}
+*** Yeah Same id PutAppend == 4446850181468810480
+db[0]= now
+server(1) replied True and PutAppendReply={false OK}
+---------------------------------------------------
+{Get 0  1061282906997500477}
+Me(2)Get, returning False rightway.
+Get did not work for server (0) .. Reply == {true ErrNoKey }!!!
+okay I(0) am gonna send command = {Put 3  3194546619066602912}, to channel
+SENT COMMAND
+
+okay I(0) am gonna send command = {Put 1  71300870958364808}, to channel
+okay I(2) am gonna send command = {Put 3  3194546619066602912}, to channel
+SENT COMMAND
+
+okay I(2) am gonna send command = {Put 1  71300870958364808}, to channel
+raft server(2) sent entry {true {Put 3  3194546619066602912} 1} on channel
+length of indexChannel = 0,  applyMsgvalCOmmandidx=1
+Apply:: key=3, val= & My(2) db looks like = map[3:]
+false
+raft server(2) sent entry {true {Put 1  71300870958364808} 2} on channel
+length of indexChannel = 1,  applyMsgvalCOmmandidx=2
+Apply:: key=1, val= & My(2) db looks like = map[1: 3:]
+false
+raft server(0) sent entry {true {Put 3  3194546619066602912} 1} on channel
+length of indexChannel = 0,  applyMsgvalCOmmandidx=1
+Apply:: key=3, val= & My(0) db looks like = map[3:]
+false
+raft server(0) sent entry {true {Put 1  71300870958364808} 2} on channel
+length of indexChannel = 1,  applyMsgvalCOmmandidx=2
+Apply:: key=1, val= & My(0) db looks like = map[1: 3:]
+false
+SENT COMMAND
+
+okay I(2) am gonna send command = {Put 4  3112828873499867471}, to channel
+SENT COMMAND
+
+okay I(2) am gonna send command = {Put 2  4411228910934756952}, to channel
+SENT COMMAND
+
+okay I(0) am gonna send command = {Put 4  3112828873499867471}, to channel
+SENT COMMAND
+
+okay I(0) am gonna send command = {Put 2  4411228910934756952}, to channel
+raft server(2) sent entry {true {Put 4  3112828873499867471} 3} on channel
+length of indexChannel = 2,  applyMsgvalCOmmandidx=3
+Apply:: key=4, val= & My(2) db looks like = map[1: 3: 4:]
+false
+raft server(2) sent entry {true {Put 2  4411228910934756952} 4} on channel
+length of indexChannel = 3,  applyMsgvalCOmmandidx=4
+Apply:: key=2, val= & My(2) db looks like = map[1: 2: 3: 4:]
+false
+raft server(0) sent entry {true {Put 4  3112828873499867471} 3} on channel
+length of indexChannel = 2,  applyMsgvalCOmmandidx=3
+Apply:: key=4, val= & My(0) db looks like = map[1: 3: 4:]
+false
+raft server(0) sent entry {true {Put 2  4411228910934756952} 4} on channel
+length of indexChannel = 3,  applyMsgvalCOmmandidx=4
+Apply:: key=2, val= & My(0) db looks like = map[1: 2: 3: 4:]
+false
+SENT COMMAND
+
+okay I(2) am gonna send command = {Put 0  4446850181468810480}, to channel
+SENT COMMAND
+
+&{0 false}
+SENT COMMAND
+
+okay I(4) am gonna send command = {Put 3  3194546619066602912}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Put 1  71300870958364808}, to channel
+raft server(2) sent entry {true {Put 0  4446850181468810480} 5} on channel
+length of indexChannel = 4,  applyMsgvalCOmmandidx=5
+Apply:: key=0, val= & My(2) db looks like = map[0: 1: 2: 3: 4:]
+false
+okay I(3) am gonna send command = {Put 3  3194546619066602912}, to channel
+SENT COMMAND
+
+okay I(3) am gonna send command = {Put 1  71300870958364808}, to channel
+okay I(0) am gonna send command = {Put 0  4446850181468810480}, to channel
+SENT COMMAND
+
+raft server(0) sent entry {true {Put 0  4446850181468810480} 5} on channel
+length of indexChannel = 4,  applyMsgvalCOmmandidx=5
+Apply:: key=0, val= & My(0) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(3) sent entry {true {Put 3  3194546619066602912} 1} on channel
+length of indexChannel = 0,  applyMsgvalCOmmandidx=1
+raft server(4) sent entry {true {Put 3  3194546619066602912} 1} on channel
+length of indexChannel = 0,  applyMsgvalCOmmandidx=1
+Apply:: key=3, val= & My(4) db looks like = map[3:]
+false
+raft server(4) sent entry {true {Put 1  71300870958364808} 2} on channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Put 4  3112828873499867471}, to channel
+&{1 true}
+Apply:: key=3, val= & My(3) db looks like = map[3:]
+false
+raft server(3) sent entry {true {Put 1  71300870958364808} 2} on channel
+length of indexChannel = 1,  applyMsgvalCOmmandidx=2
+Apply:: key=1, val= & My(3) db looks like = map[1: 3:]
+false
+length of indexChannel = 1,  applyMsgvalCOmmandidx=2
+Apply:: key=1, val= & My(4) db looks like = map[1: 3:]
+false
+raft server(4) sent entry {true {Put 4  3112828873499867471} 3} on channel
+length of indexChannel = 2,  applyMsgvalCOmmandidx=3
+Apply:: key=4, val= & My(4) db looks like = map[1: 3: 4:]
+false
+SENT COMMAND
+
+okay I(3) am gonna send command = {Put 4  3112828873499867471}, to channel
+SENT COMMAND
+
+okay I(3) am gonna send command = {Put 2  4411228910934756952}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Put 2  4411228910934756952}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Put 0  4446850181468810480}, to channel
+raft server(3) sent entry {true {Put 4  3112828873499867471} 3} on channel
+length of indexChannel = 2,  applyMsgvalCOmmandidx=3
+Apply:: key=4, val= & My(3) db looks like = map[1: 3: 4:]
+false
+raft server(3) sent entry {true {Put 2  4411228910934756952} 4} on channel
+length of indexChannel = 3,  applyMsgvalCOmmandidx=4
+Apply:: key=2, val= & My(3) db looks like = map[1: 2: 3: 4:]
+false
+raft server(4) sent entry {true {Put 2  4411228910934756952} 4} on channel
+length of indexChannel = 3,  applyMsgvalCOmmandidx=4
+Apply:: key=2, val= & My(4) db looks like = map[1: 2: 3: 4:]
+false
+raft server(4) sent entry {true {Put 0  4446850181468810480} 5} on channel
+length of indexChannel = 4,  applyMsgvalCOmmandidx=5
+Apply:: key=0, val= & My(4) db looks like = map[0: 1: 2: 3: 4:]
+false
+SENT COMMAND
+
+okay I(3) am gonna send command = {Put 0  4446850181468810480}, to channel
+SENT COMMAND
+
+&{1 true}
+SENT COMMAND
+
+&{1 true}
+raft server(3) sent entry {true {Put 0  4446850181468810480} 5} on channel
+length of indexChannel = 4,  applyMsgvalCOmmandidx=5
+Apply:: key=0, val= & My(3) db looks like = map[0: 1: 2: 3: 4:]
+false
+{Get 0  1061282906997500477}
+Me(0)Get, returning False rightway.
+Get did not work for server (1) .. Reply == {true ErrNoKey }!!!
+{Get 0  1061282906997500477}
+Me(4)Get, returning False rightway.
+Get did not work for server (2) .. Reply == {false ErrNoKey }!!!
+{Get 0  1061282906997500477}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1}]
+6
+---------------------------------------------------
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+ in Majority looop !!
+okay I(1) am gonna send command = {Get 0  1061282906997500477}, to channel
+SENT COMMAND
+
+&{0 false}
+&{0 false}
+raft server(1) sent entry {true {Get 0  1061282906997500477} 6} on channel
+length of indexChannel = 6,  applyMsgvalCOmmandidx=6
+Apply:: key=0, val= & My(1) db looks like = map[0: 1: 2: 3: 4:]
+true
+*** Yeah Same id Get == 1061282906997500477
+db= map[0: 1: 2: 3: 4:]
+key= 0
+server(3) replied True {false OK } and reply.value==...gonna return
+{Get 1  3001612139557243495}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1}]
+7
+---------------------------------------------------
+okay I(4) am gonna send command = {Get 0  1061282906997500477}, to channel
+SENT COMMAND
+
+okay I(2) am gonna send command = {Get 0  1061282906997500477}, to channel
+SENT COMMAND
+
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+okay I(3) am gonna send command = {Get 0  1061282906997500477}, to channel
+SENT COMMAND
+
+raft server(2) sent entry {true {Get 0  1061282906997500477} 6} on channel
+length of indexChannel = 5,  applyMsgvalCOmmandidx=6
+Apply:: key=0, val= & My(2) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(3) sent entry {true {Get 0  1061282906997500477} 6} on channel
+length of indexChannel = 5,  applyMsgvalCOmmandidx=6
+Apply:: key=0, val= & My(3) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(4) sent entry {true {Get 0  1061282906997500477} 6} on channel
+length of indexChannel = 5,  applyMsgvalCOmmandidx=6
+Apply:: key=0, val= & My(4) db looks like = map[0: 1: 2: 3: 4:]
+false
+okay I(0) am gonna send command = {Get 0  1061282906997500477}, to channel
+SENT COMMAND
+
+raft server(0) sent entry {true {Get 0  1061282906997500477} 6} on channel
+length of indexChannel = 5,  applyMsgvalCOmmandidx=6
+Apply:: key=0, val= & My(0) db looks like = map[0: 1: 2: 3: 4:]
+false
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+ in Majority looop !!
+okay I(1) am gonna send command = {Get 1  3001612139557243495}, to channel
+SENT COMMAND
+
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+raft server(1) sent entry {true {Get 1  3001612139557243495} 7} on channel
+length of indexChannel = 7,  applyMsgvalCOmmandidx=7
+Apply:: key=1, val= & My(1) db looks like = map[0: 1: 2: 3: 4:]
+true
+*** Yeah Same id Get == 3001612139557243495
+db= map[0: 1: 2: 3: 4:]
+key= 1
+server(3) replied True {false OK } and reply.value==...gonna return
+{Get 2  403514245095688083}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1}]
+8
+---------------------------------------------------
+okay I(2) am gonna send command = {Get 1  3001612139557243495}, to channel
+SENT COMMAND
+
+raft server(2) sent entry {true {Get 1  3001612139557243495} 7} on channel
+length of indexChannel = 6,  applyMsgvalCOmmandidx=7
+Apply:: key=1, val= & My(2) db looks like = map[0: 1: 2: 3: 4:]
+false
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+&{0 false}
+okay I(0) am gonna send command = {Get 1  3001612139557243495}, to channel
+SENT COMMAND
+
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+ in Majority looop !!
+okay I(1) am gonna send command = {Get 2  403514245095688083}, to channel
+SENT COMMAND
+
+okay I(3) am gonna send command = {Get 1  3001612139557243495}, to channel
+SENT COMMAND
+
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+raft server(3) sent entry {true {Get 1  3001612139557243495} 7} on channel
+length of indexChannel = 6,  applyMsgvalCOmmandidx=7
+Apply:: key=1, val= & My(3) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(0) sent entry {true {Get 1  3001612139557243495} 7} on channel
+length of indexChannel = 6,  applyMsgvalCOmmandidx=7
+Apply:: key=1, val= & My(0) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(1) sent entry {true {Get 2  403514245095688083} 8} on channel
+length of indexChannel = 8,  applyMsgvalCOmmandidx=8
+Apply:: key=2, val= & My(1) db looks like = map[0: 1: 2: 3: 4:]
+true
+*** Yeah Same id Get == 403514245095688083
+db= map[0: 1: 2: 3: 4:]
+key= 2
+server(3) replied True {false OK } and reply.value==...gonna return
+---------------------------------------------------
+{Get 3  2190113532958391048}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1}]
+9
+&{0 false}
+okay I(4) am gonna send command = {Get 1  3001612139557243495}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Get 2  403514245095688083}, to channel
+okay I(2) am gonna send command = {Get 2  403514245095688083}, to channel
+SENT COMMAND
+
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+okay I(3) am gonna send command = {Get 2  403514245095688083}, to channel
+SENT COMMAND
+
+raft server(2) sent entry {true {Get 2  403514245095688083} 8} on channel
+length of indexChannel = 7,  applyMsgvalCOmmandidx=8
+Apply:: key=2, val= & My(2) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(4) sent entry {true {Get 1  3001612139557243495} 7} on channel
+length of indexChannel = 6,  applyMsgvalCOmmandidx=7
+Apply:: key=1, val= & My(4) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(4) sent entry {true {Get 2  403514245095688083} 8} on channel
+length of indexChannel = 7,  applyMsgvalCOmmandidx=8
+Apply:: key=2, val= & My(4) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(3) sent entry {true {Get 2  403514245095688083} 8} on channel
+length of indexChannel = 7,  applyMsgvalCOmmandidx=8
+Apply:: key=2, val= & My(3) db looks like = map[0: 1: 2: 3: 4:]
+false
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+ in Majority looop !!
+okay I(1) am gonna send command = {Get 3  2190113532958391048}, to channel
+SENT COMMAND
+
+raft server(1) sent entry {true {Get 3  2190113532958391048} 9} on channel
+length of indexChannel = 9,  applyMsgvalCOmmandidx=9
+Apply:: key=3, val= & My(1) db looks like = map[0: 1: 2: 3: 4:]
+true
+*** Yeah Same id Get == 2190113532958391048
+db= map[0: 1: 2: 3: 4:]
+key= 3
+server(3) replied True {false OK } and reply.value==...gonna return
+SENT COMMAND
+
+&{0 false}
+{Get 4  1455746235410270258}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1}]
+10
+---------------------------------------------------
+okay I(3) am gonna send command = {Get 3  2190113532958391048}, to channel
+SENT COMMAND
+
+okay I(0) am gonna send command = {Get 2  403514245095688083}, to channel
+SENT COMMAND
+
+okay I(0) am gonna send command = {Get 3  2190113532958391048}, to channel
+raft server(3) sent entry {true {Get 3  2190113532958391048} 9} on channel
+length of indexChannel = 8,  applyMsgvalCOmmandidx=9
+Apply:: key=3, val= & My(3) db looks like = map[0: 1: 2: 3: 4:]
+false
+okay I(2) am gonna send command = {Get 3  2190113532958391048}, to channel
+SENT COMMAND
+
+raft server(2) sent entry {true {Get 3  2190113532958391048} 9} on channel
+length of indexChannel = 8,  applyMsgvalCOmmandidx=9
+Apply:: key=3, val= & My(2) db looks like = map[0: 1: 2: 3: 4:]
+false
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+okay I(4) am gonna send command = {Get 3  2190113532958391048}, to channel
+SENT COMMAND
+
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+ in Majority looop !!
+okay I(1) am gonna send command = {Get 4  1455746235410270258}, to channel
+SENT COMMAND
+
+raft server(0) sent entry {true {Get 2  403514245095688083} 8} on channel
+length of indexChannel = 7,  applyMsgvalCOmmandidx=8
+Apply:: key=2, val= & My(0) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(0) sent entry {true {Get 3  2190113532958391048} 9} on channel
+length of indexChannel = 8,  applyMsgvalCOmmandidx=9
+Apply:: key=3, val= & My(0) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(1) sent entry {true {Get 4  1455746235410270258} 10} on channel
+length of indexChannel = 10,  applyMsgvalCOmmandidx=10
+Apply:: key=4, val= & My(1) db looks like = map[0: 1: 2: 3: 4:]
+true
+*** Yeah Same id Get == 1455746235410270258
+db= map[0: 1: 2: 3: 4:]
+key= 4
+server(3) replied True {false OK } and reply.value==...gonna return
+*********************************ITERATION(1)**************
+
+raft server(4) sent entry {true {Get 3  2190113532958391048} 9} on channel
+length of indexChannel = 8,  applyMsgvalCOmmandidx=9
+Apply:: key=3, val= & My(4) db looks like = map[0: 1: 2: 3: 4:]
+false
+
+
+
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+
+{Put 1  904240132544189187}
+Me(2):: raftindex=-1, term=1, isLeader=false
+Me(2)PutAppend, returning False rightway.
+PutAppend did not work for server (0) .. Reply == {true ErrNoKey}!!!
+{Put 2  1912452408401146142}
+Me(3):: raftindex=-1, term=1, isLeader=false
+SENT COMMAND
+
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+Me(3)PutAppend, returning False rightway.
+PutAppend did not work for server (0) .. Reply == {true ErrNoKey}!!!
+PutAppend did not work for server (0) .. Reply == {false ErrNoKey}!!!
+{Put 2  1912452408401146142}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1}]
+Me(1):: raftindex=11, term=1, isLeader=true
+{Put 3  48628758233258999}
+Me(3):: raftindex=-1, term=1, isLeader=false
+Me(3)PutAppend, returning False rightway.
+PutAppend did not work for server (0) .. Reply == {false ErrNoKey}!!!
+{Put 0  1246767324458061701}
+Me(3):: raftindex=-1, term=1, isLeader=false
+11
+{Put 4  4606891641184670124}
+Me(0):: raftindex=-1, term=1, isLeader=false
+Me(3)PutAppend, returning False rightway.
+PutAppend did not work for server (0) .. Reply == {true ErrNoKey}!!!
+{Put 3  48628758233258999}
+Me(4):: raftindex=-1, term=1, isLeader=false
+Me(4)PutAppend, returning False rightway.
+PutAppend did not work for server (1) .. Reply == {true ErrNoKey}!!!
+{Put 0  1246767324458061701}
+PutAppend did not work for server (2) .. Reply == {false ErrNoKey}!!!
+PutAppend did not work for server (1) .. Reply == {false ErrNoKey}!!!
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1}]
+Me(1):: raftindex=12, term=1, isLeader=true
+12
+PutAppend did not work for server (3) .. Reply == {false ErrNoKey}!!!
+Me(0)PutAppend, returning False rightway.
+PutAppend did not work for server (1) .. Reply == {true ErrNoKey}!!!
+{Put 3  48628758233258999}
+Me(2):: raftindex=-1, term=1, isLeader=false
+{Put 1  904240132544189187}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1}]
+Me(1):: raftindex=13, term=1, isLeader=true
+13
+{Put 4  4606891641184670124}
+---------------------------------------------------
+Me(4):: raftindex=-1, term=1, isLeader=false
+Me(4)PutAppend, returning False rightway.
+PutAppend did not work for server (2) .. Reply == {true ErrNoKey}!!!
+Me(2)PutAppend, returning False rightway.
+PutAppend did not work for server (4) .. Reply == {true ErrNoKey}!!!
+&{0 false}
+okay I(2) am gonna send command = {Get 4  1455746235410270258}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Get 4  1455746235410270258}, to channel
+SENT COMMAND
+
+raft server(2) sent entry {true {Get 4  1455746235410270258} 10} on channel
+length of indexChannel = 9,  applyMsgvalCOmmandidx=10
+Apply:: key=4, val= & My(2) db looks like = map[0: 1: 2: 3: 4:]
+false
+{Put 4  4606891641184670124}
+Me(2):: raftindex=-1, term=1, isLeader=false
+Me(2)PutAppend, returning False rightway.
+PutAppend did not work for server (3) .. Reply == {true ErrNoKey}!!!
+raft server(4) sent entry {true {Get 4  1455746235410270258} 10} on channel
+length of indexChannel = 9,  applyMsgvalCOmmandidx=10
+Apply:: key=4, val= & My(4) db looks like = map[0: 1: 2: 3: 4:]
+false
+okay I(0) am gonna send command = {Get 4  1455746235410270258}, to channel
+SENT COMMAND
+
+raft server(0) sent entry {true {Get 4  1455746235410270258} 10} on channel
+length of indexChannel = 9,  applyMsgvalCOmmandidx=10
+Apply:: key=4, val= & My(0) db looks like = map[0: 1: 2: 3: 4:]
+false
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+{Put 4  4606891641184670124}
+Me(3):: raftindex=-1, term=1, isLeader=false
+{Put 3  48628758233258999}
+Me(3)PutAppend, returning False rightway.
+PutAppend did not work for server (4) .. Reply == {true ErrNoKey}!!!
+&{0 false}
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+okay I(1) am gonna send command = {Put 2  1912452408401146142}, to channel
+SENT COMMAND
+
+okay I(1) am gonna send command = {Put 0  1246767324458061701}, to channel
+Me(3):: raftindex=-1, term=1, isLeader=false
+Me(3)PutAppend, returning False rightway.
+PutAppend did not work for server (0) .. Reply == {true ErrNoKey}!!!
+raft server(1) sent entry {true {Put 2  1912452408401146142} 11} on channel
+length of indexChannel = 13,  applyMsgvalCOmmandidx=11
+Apply:: key=2, val= & My(1) db looks like = map[0: 1: 2: 3: 4:]
+true
+raft server(1) sent entry {true {Put 0  1246767324458061701} 12} on channel
+length of indexChannel = 13,  applyMsgvalCOmmandidx=12
+Apply:: key=0, val= & My(1) db looks like = map[0: 1: 2: 3: 4:]
+true
+JE SIR==  {Put 0  1246767324458061701}
+*** Yeah Same id PutAppend == 1246767324458061701
+db[0]= now
+server(1) replied True and PutAppendReply={false OK}
+{Put 3  48628758233258999}
+Me(4):: raftindex=-1, term=1, isLeader=false
+JE SIR==  {Put 2  1912452408401146142}
+*** Yeah Same id PutAppend == 1912452408401146142
+db[2]= now
+server(1) replied True and PutAppendReply={false OK}
+SENT COMMAND
+
+okay I(1) am gonna send command = {Put 1  904240132544189187}, to channel
+SENT COMMAND
+
+{Put 4  4606891641184670124}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1}]
+{Get 0  2877360513208642589}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1}]
+{Get 2  468329378926607851}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1}]
+---------------------------------------------------
+Me(4)PutAppend, returning False rightway.
+PutAppend did not work for server (1) .. Reply == {true ErrNoKey}!!!
+raft server(1) sent entry {true {Put 1  904240132544189187} 13} on channel
+length of indexChannel = 13,  applyMsgvalCOmmandidx=13
+Apply:: key=1, val= & My(1) db looks like = map[0: 1: 2: 3: 4:]
+true
+Me(1):: raftindex=14, term=1, isLeader=true
+14
+15
+16
+okay I(0) am gonna send command = {Put 2  1912452408401146142}, to channel
+SENT COMMAND
+
+okay I(0) am gonna send command = {Put 0  1246767324458061701}, to channel
+JE SIR==  {Put 1  904240132544189187}
+*** Yeah Same id PutAppend == 904240132544189187
+db[1]= now
+okay I(3) am gonna send command = {Get 4  1455746235410270258}, to channel
+SENT COMMAND
+
+okay I(3) am gonna send command = {Put 2  1912452408401146142}, to channel
+raft server(3) sent entry {true {Get 4  1455746235410270258} 10} on channel
+length of indexChannel = 9,  applyMsgvalCOmmandidx=10
+Apply:: key=4, val= & My(3) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(3) sent entry {true {Put 2  1912452408401146142} 11} on channel
+length of indexChannel = 10,  applyMsgvalCOmmandidx=11
+Apply:: key=2, val= & My(3) db looks like = map[0: 1: 2: 3: 4:]
+false
+SENT COMMAND
+
+okay I(3) am gonna send command = {Put 0  1246767324458061701}, to channel
+SENT COMMAND
+
+okay I(3) am gonna send command = {Put 1  904240132544189187}, to channel
+raft server(0) sent entry {true {Put 2  1912452408401146142} 11} on channel
+length of indexChannel = 10,  applyMsgvalCOmmandidx=11
+Apply:: key=2, val= & My(0) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(0) sent entry {true {Put 0  1246767324458061701} 12} on channel
+length of indexChannel = 11,  applyMsgvalCOmmandidx=12
+Apply:: key=0, val= & My(0) db looks like = map[0: 1: 2: 3: 4:]
+false
+SENT COMMAND
+
+okay I(0) am gonna send command = {Put 1  904240132544189187}, to channel
+SENT COMMAND
+
+raft server(3) sent entry {true {Put 0  1246767324458061701} 12} on channel
+length of indexChannel = 11,  applyMsgvalCOmmandidx=12
+Apply:: key=0, val= & My(3) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(3) sent entry {true {Put 1  904240132544189187} 13} on channel
+length of indexChannel = 12,  applyMsgvalCOmmandidx=13
+Apply:: key=1, val= & My(3) db looks like = map[0: 1: 2: 3: 4:]
+false
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+raft server(0) sent entry {true {Put 1  904240132544189187} 13} on channel
+length of indexChannel = 12,  applyMsgvalCOmmandidx=13
+Apply:: key=1, val= & My(0) db looks like = map[0: 1: 2: 3: 4:]
+false
+SENT COMMAND
+
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+okay I(1) am gonna send command = {Put 4  4606891641184670124}, to channel
+SENT COMMAND
+
+okay I(1) am gonna send command = {Get 0  2877360513208642589}, to channel
+raft server(1) sent entry {true {Put 4  4606891641184670124} 14} on channel
+length of indexChannel = 16,  applyMsgvalCOmmandidx=14
+Apply:: key=4, val= & My(1) db looks like = map[0: 1: 2: 3: 4:]
+true
+raft server(1) sent entry {true {Get 0  2877360513208642589} 15} on channel
+length of indexChannel = 16,  applyMsgvalCOmmandidx=15
+Apply:: key=0, val= & My(1) db looks like = map[0: 1: 2: 3: 4:]
+true
+*** Yeah Same id Get == 2877360513208642589
+db= map[0: 1: 2: 3: 4:]
+key= 0
+server(1) replied True {false OK } and reply.value==...gonna return
+x 0 0 y
+server(2) replied True and PutAppendReply={false OK}
+SENT COMMAND
+
+okay I(1) am gonna send command = {Get 2  468329378926607851}, to channel
+SENT COMMAND
+
+okay I(2) am gonna send command = {Put 2  1912452408401146142}, to channel
+SENT COMMAND
+
+okay I(2) am gonna send command = {Put 0  1246767324458061701}, to channel
+{Append 0 x 0 0 y 1314806190894946817}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1}]
+&{0 false}
+{Get 1  1164828912374957892}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1}]
+raft server(2) sent entry {true {Put 2  1912452408401146142} 11} on channel
+length of indexChannel = 10,  applyMsgvalCOmmandidx=11
+Apply:: key=2, val= & My(2) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(2) sent entry {true {Put 0  1246767324458061701} 12} on channel
+length of indexChannel = 11,  applyMsgvalCOmmandidx=12
+Apply:: key=0, val= & My(2) db looks like = map[0: 1: 2: 3: 4:]
+false
+PutAppend did not work for server (2) .. Reply == {false ErrNoKey}!!!
+raft server(1) sent entry {true {Get 2  468329378926607851} 16} on channel
+length of indexChannel = 16,  applyMsgvalCOmmandidx=16
+Apply:: key=2, val= & My(1) db looks like = map[0: 1: 2: 3: 4:]
+true
+Me(1):: raftindex=17, term=1, isLeader=true
+17
+18
+{Put 3  48628758233258999}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1}]
+Me(1):: raftindex=19, term=1, isLeader=true
+SENT COMMAND
+
+okay I(2) am gonna send command = {Put 1  904240132544189187}, to channel
+SENT COMMAND
+
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+JE SIR==  {Put 4  4606891641184670124}
+*** Yeah Same id PutAppend == 4606891641184670124
+db[4]= now
+server(0) replied True and PutAppendReply={false OK}
+*** Yeah Same id Get == 468329378926607851
+db= map[0: 1: 2: 3: 4:]
+key= 2
+Get did not work for server (1) .. Reply == {false ErrNoKey }!!!
+{Get 4  977456334777626116}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1} {{Get 4  977456334777626116} 0 1}]
+---------------------------------------------------
+19
+20
+{Get 2  468329378926607851}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1} {{Get 4  977456334777626116} 0 1} {{Get 2  468329378926607851} 0 1}]
+21
+raft server(2) sent entry {true {Put 1  904240132544189187} 13} on channel
+length of indexChannel = 12,  applyMsgvalCOmmandidx=13
+Apply:: key=1, val= & My(2) db looks like = map[0: 1: 2: 3: 4:]
+false
+&{0 false}
+okay I(2) am gonna send command = {Put 4  4606891641184670124}, to channel
+SENT COMMAND
+
+okay I(2) am gonna send command = {Get 0  2877360513208642589}, to channel
+okay I(0) am gonna send command = {Put 4  4606891641184670124}, to channel
+SENT COMMAND
+
+okay I(0) am gonna send command = {Get 0  2877360513208642589}, to channel
+raft server(2) sent entry {true {Put 4  4606891641184670124} 14} on channel
+length of indexChannel = 13,  applyMsgvalCOmmandidx=14
+Apply:: key=4, val= & My(2) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(2) sent entry {true {Get 0  2877360513208642589} 15} on channel
+length of indexChannel = 14,  applyMsgvalCOmmandidx=15
+Apply:: key=0, val= & My(2) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(0) sent entry {true {Put 4  4606891641184670124} 14} on channel
+length of indexChannel = 13,  applyMsgvalCOmmandidx=14
+Apply:: key=4, val= & My(0) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(0) sent entry {true {Get 0  2877360513208642589} 15} on channel
+length of indexChannel = 14,  applyMsgvalCOmmandidx=15
+Apply:: key=0, val= & My(0) db looks like = map[0: 1: 2: 3: 4:]
+false
+okay I(4) am gonna send command = {Put 2  1912452408401146142}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Put 0  1246767324458061701}, to channel
+SENT COMMAND
+
+okay I(0) am gonna send command = {Get 2  468329378926607851}, to channel
+SENT COMMAND
+
+raft server(4) sent entry {true {Put 2  1912452408401146142} 11} on channel
+length of indexChannel = 10,  applyMsgvalCOmmandidx=11
+Apply:: key=2, val= & My(4) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(4) sent entry {true {Put 0  1246767324458061701} 12} on channel
+length of indexChannel = 11,  applyMsgvalCOmmandidx=12
+SENT COMMAND
+
+okay I(4) am gonna send command = {Put 1  904240132544189187}, to channel
+Apply:: key=0, val= & My(4) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(4) sent entry {true {Put 1  904240132544189187} 13} on channel
+length of indexChannel = 12,  applyMsgvalCOmmandidx=13
+Apply:: key=1, val= & My(4) db looks like = map[0: 1: 2: 3: 4:]
+false
+SENT COMMAND
+
+okay I(4) am gonna send command = {Put 4  4606891641184670124}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Get 0  2877360513208642589}, to channel
+raft server(0) sent entry {true {Get 2  468329378926607851} 16} on channel
+length of indexChannel = 15,  applyMsgvalCOmmandidx=16
+Apply:: key=2, val= & My(0) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(4) sent entry {true {Put 4  4606891641184670124} 14} on channel
+length of indexChannel = 13,  applyMsgvalCOmmandidx=14
+Apply:: key=4, val= & My(4) db looks like = map[0: 1: 2: 3: 4:]
+false
+SENT COMMAND
+
+okay I(2) am gonna send command = {Get 2  468329378926607851}, to channel
+SENT COMMAND
+
+SENT COMMAND
+
+okay I(4) am gonna send command = {Get 2  468329378926607851}, to channel
+raft server(4) sent entry {true {Get 0  2877360513208642589} 15} on channel
+length of indexChannel = 14,  applyMsgvalCOmmandidx=15
+Apply:: key=0, val= & My(4) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(4) sent entry {true {Get 2  468329378926607851} 16} on channel
+length of indexChannel = 15,  applyMsgvalCOmmandidx=16
+Apply:: key=2, val= & My(4) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(2) sent entry {true {Get 2  468329378926607851} 16} on channel
+length of indexChannel = 15,  applyMsgvalCOmmandidx=16
+Apply:: key=2, val= & My(2) db looks like = map[0: 1: 2: 3: 4:]
+false
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+okay I(1) am gonna send command = {Append 0 x 0 0 y 1314806190894946817}, to channel
+SENT COMMAND
+
+okay I(1) am gonna send command = {Get 1  1164828912374957892}, to channel
+SENT COMMAND
+
+raft server(1) sent entry {true {Append 0 x 0 0 y 1314806190894946817} 17} on channel
+length of indexChannel = 21,  applyMsgvalCOmmandidx=17
+Apply:: key=0, val=x 0 0 y & My(1) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+true
+raft server(1) sent entry {true {Get 1  1164828912374957892} 18} on channel
+length of indexChannel = 21,  applyMsgvalCOmmandidx=18
+Apply:: key=1, val= & My(1) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+true
+*** Yeah Same id Get == 1164828912374957892
+db= map[0:x 0 0 y 1: 2: 3: 4:]
+key= 1
+server(2) replied True {false OK } and reply.value==...gonna return
+JE SIR==  {Append 0 x 0 0 y 1314806190894946817}
+*** Yeah Same id PutAppend == 1314806190894946817
+db[0]=x 0 0 y now
+server(1) replied True and PutAppendReply={false OK}
+SENT COMMAND
+
+okay I(1) am gonna send command = {Put 3  48628758233258999}, to channel
+SENT COMMAND
+
+okay I(1) am gonna send command = {Get 4  977456334777626116}, to channel
+raft server(1) sent entry {true {Put 3  48628758233258999} 19} on channel
+length of indexChannel = 21,  applyMsgvalCOmmandidx=19
+Apply:: key=3, val= & My(1) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+true
+raft server(1) sent entry {true {Get 4  977456334777626116} 20} on channel
+length of indexChannel = 21,  applyMsgvalCOmmandidx=20
+Apply:: key=4, val= & My(1) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+true
+*** Yeah Same id Get == 977456334777626116
+db= map[0:x 0 0 y 1: 2: 3: 4:]
+key= 4
+server(0) replied True {false OK } and reply.value==...gonna return
+x 4 0 y
+SENT COMMAND
+
+okay I(1) am gonna send command = {Get 2  468329378926607851}, to channel
+SENT COMMAND
+
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+{Get 1  2666063499653400766}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1} {{Get 4  977456334777626116} 0 1} {{Get 2  468329378926607851} 0 1} {{Get 1  2666063499653400766} 0 1}]
+{Get 0  1326356537185846927}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1} {{Get 4  977456334777626116} 0 1} {{Get 2  468329378926607851} 0 1} {{Get 1  2666063499653400766} 0 1} {{Get 0  1326356537185846927} 0 1}]
+raft server(1) sent entry {true {Get 2  468329378926607851} 21} on channel
+length of indexChannel = 21,  applyMsgvalCOmmandidx=21
+Apply:: key=2, val= & My(1) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+true
+22
+23
+JE SIR==  {Put 3  48628758233258999}
+*** Yeah Same id PutAppend == 48628758233258999
+db[3]= now
+PutAppend did not work for server (3) .. Reply == {false ErrNoKey}!!!
+{Append 4 x 4 0 y 1769915672299364627}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1} {{Get 4  977456334777626116} 0 1} {{Get 2  468329378926607851} 0 1} {{Get 1  2666063499653400766} 0 1} {{Get 0  1326356537185846927} 0 1} {{Append 4 x 4 0 y 1769915672299364627} 0 1}]
+Me(1):: raftindex=24, term=1, isLeader=true
+24
+---------------------------------------------------
+*** Yeah Same id Get == 468329378926607851
+db= map[0:x 0 0 y 1: 2: 3: 4:]
+key= 2
+server(1) replied True {false OK } and reply.value==...gonna return
+okay I(4) am gonna send command = {Append 0 x 0 0 y 1314806190894946817}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Get 1  1164828912374957892}, to channel
+raft server(4) sent entry {true {Append 0 x 0 0 y 1314806190894946817} 17} on channel
+length of indexChannel = 16,  applyMsgvalCOmmandidx=17
+Apply:: key=0, val=x 0 0 y & My(4) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+raft server(4) sent entry {true {Get 1  1164828912374957892} 18} on channel
+length of indexChannel = 17,  applyMsgvalCOmmandidx=18
+Apply:: key=1, val= & My(4) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+{Put 3  48628758233258999}
+Me(2):: raftindex=-1, term=1, isLeader=false
+Me(2)PutAppend, returning False rightway.
+PutAppend did not work for server (4) .. Reply == {true ErrNoKey}!!!
+okay I(2) am gonna send command = {Append 0 x 0 0 y 1314806190894946817}, to channel
+SENT COMMAND
+
+okay I(2) am gonna send command = {Get 1  1164828912374957892}, to channel
+raft server(2) sent entry {true {Append 0 x 0 0 y 1314806190894946817} 17} on channel
+length of indexChannel = 16,  applyMsgvalCOmmandidx=17
+Apply:: key=0, val=x 0 0 y & My(2) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+raft server(2) sent entry {true {Get 1  1164828912374957892} 18} on channel
+length of indexChannel = 17,  applyMsgvalCOmmandidx=18
+Apply:: key=1, val= & My(2) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+okay I(0) am gonna send command = {Append 0 x 0 0 y 1314806190894946817}, to channel
+SENT COMMAND
+
+okay I(0) am gonna send command = {Get 1  1164828912374957892}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Put 3  48628758233258999}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Get 4  977456334777626116}, to channel
+SENT COMMAND
+
+okay I(2) am gonna send command = {Put 3  48628758233258999}, to channel
+SENT COMMAND
+
+okay I(2) am gonna send command = {Get 4  977456334777626116}, to channel
+raft server(0) sent entry {true {Append 0 x 0 0 y 1314806190894946817} 17} on channel
+length of indexChannel = 16,  applyMsgvalCOmmandidx=17
+Apply:: key=0, val=x 0 0 y & My(0) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+raft server(0) sent entry {true {Get 1  1164828912374957892} 18} on channel
+length of indexChannel = 17,  applyMsgvalCOmmandidx=18
+Apply:: key=1, val= & My(0) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+SENT COMMAND
+
+okay I(0) am gonna send command = {Put 3  48628758233258999}, to channel
+SENT COMMAND
+
+okay I(0) am gonna send command = {Get 4  977456334777626116}, to channel
+raft server(4) sent entry {true {Put 3  48628758233258999} 19} on channel
+length of indexChannel = 18,  applyMsgvalCOmmandidx=19
+Apply:: key=3, val= & My(4) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+raft server(2) sent entry {true {Put 3  48628758233258999} 19} on channel
+length of indexChannel = 18,  applyMsgvalCOmmandidx=19
+Apply:: key=3, val= & My(2) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+raft server(0) sent entry {true {Put 3  48628758233258999} 19} on channel
+length of indexChannel = 18,  applyMsgvalCOmmandidx=19
+Apply:: key=3, val= & My(0) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+raft server(0) sent entry {true {Get 4  977456334777626116} 20} on channel
+length of indexChannel = 19,  applyMsgvalCOmmandidx=20
+Apply:: key=4, val= & My(0) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+SENT COMMAND
+
+okay I(2) am gonna send command = {Get 2  468329378926607851}, to channel
+raft server(4) sent entry {true {Get 4  977456334777626116} 20} on channel
+length of indexChannel = 19,  applyMsgvalCOmmandidx=20
+Apply:: key=4, val= & My(4) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+SENT COMMAND
+
+okay I(4) am gonna send command = {Get 2  468329378926607851}, to channel
+SENT COMMAND
+
+raft server(2) sent entry {true {Get 4  977456334777626116} 20} on channel
+length of indexChannel = 19,  applyMsgvalCOmmandidx=20
+Apply:: key=4, val= & My(2) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+SENT COMMAND
+
+okay I(0) am gonna send command = {Get 2  468329378926607851}, to channel
+SENT COMMAND
+
+raft server(0) sent entry {true {Get 2  468329378926607851} 21} on channel
+length of indexChannel = 20,  applyMsgvalCOmmandidx=21
+Apply:: key=2, val= & My(0) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+raft server(2) sent entry {true {Get 2  468329378926607851} 21} on channel
+length of indexChannel = 20,  applyMsgvalCOmmandidx=21
+Apply:: key=2, val= & My(2) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+SENT COMMAND
+
+raft server(4) sent entry {true {Get 2  468329378926607851} 21} on channel
+length of indexChannel = 20,  applyMsgvalCOmmandidx=21
+Apply:: key=2, val= & My(4) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+okay I(3) am gonna send command = {Put 4  4606891641184670124}, to channel
+SENT COMMAND
+
+okay I(3) am gonna send command = {Get 0  2877360513208642589}, to channel
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+okay I(1) am gonna send command = {Get 1  2666063499653400766}, to channel
+SENT COMMAND
+
+okay I(1) am gonna send command = {Get 0  1326356537185846927}, to channel
+raft server(3) sent entry {true {Put 4  4606891641184670124} 14} on channel
+length of indexChannel = 13,  applyMsgvalCOmmandidx=14
+Apply:: key=4, val= & My(3) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(3) sent entry {true {Get 0  2877360513208642589} 15} on channel
+length of indexChannel = 14,  applyMsgvalCOmmandidx=15
+Apply:: key=0, val= & My(3) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(1) sent entry {true {Get 1  2666063499653400766} 22} on channel
+length of indexChannel = 24,  applyMsgvalCOmmandidx=22
+Apply:: key=1, val= & My(1) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+true
+raft server(1) sent entry {true {Get 0  1326356537185846927} 23} on channel
+length of indexChannel = 24,  applyMsgvalCOmmandidx=23
+Apply:: key=0, val= & My(1) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+true
+*** Yeah Same id Get == 1326356537185846927
+db= map[0:x 0 0 y 1: 2: 3: 4:]
+key= 0
+server(1) replied True {false OK x 0 0 y} and reply.value==x 0 0 y...gonna return
+x 0 1 y
+*** Yeah Same id Get == 2666063499653400766
+db= map[0:x 0 0 y 1: 2: 3: 4:]
+key= 1
+server(2) replied True {false OK } and reply.value==...gonna return
+SENT COMMAND
+
+okay I(3) am gonna send command = {Get 2  468329378926607851}, to channel
+SENT COMMAND
+
+okay I(3) am gonna send command = {Append 0 x 0 0 y 1314806190894946817}, to channel
+SENT COMMAND
+
+okay I(1) am gonna send command = {Append 4 x 4 0 y 1769915672299364627}, to channel
+SENT COMMAND
+
+&{0 false}
+{Get 2  487221198254046600}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1} {{Get 4  977456334777626116} 0 1} {{Get 2  468329378926607851} 0 1} {{Get 1  2666063499653400766} 0 1} {{Get 0  1326356537185846927} 0 1} {{Append 4 x 4 0 y 1769915672299364627} 0 1} {{Get 2  487221198254046600} 0 1}]
+raft server(3) sent entry {true {Get 2  468329378926607851} 16} on channel
+length of indexChannel = 15,  applyMsgvalCOmmandidx=16
+Apply:: key=2, val= & My(3) db looks like = map[0: 1: 2: 3: 4:]
+false
+raft server(3) sent entry {true {Append 0 x 0 0 y 1314806190894946817} 17} on channel
+length of indexChannel = 16,  applyMsgvalCOmmandidx=17
+Apply:: key=0, val=x 0 0 y & My(3) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+raft server(1) sent entry {true {Append 4 x 4 0 y 1769915672299364627} 24} on channel
+length of indexChannel = 24,  applyMsgvalCOmmandidx=24
+Apply:: key=4, val=x 4 0 y & My(1) db looks like = map[0:x 0 0 y 1: 2: 3: 4:x 4 0 y]
+true
+25
+SENT COMMAND
+
+okay I(3) am gonna send command = {Get 1  1164828912374957892}, to channel
+SENT COMMAND
+
+okay I(3) am gonna send command = {Put 3  48628758233258999}, to channel
+raft server(3) sent entry {true {Get 1  1164828912374957892} 18} on channel
+length of indexChannel = 17,  applyMsgvalCOmmandidx=18
+Apply:: key=1, val= & My(3) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+raft server(3) sent entry {true {Put 3  48628758233258999} 19} on channel
+length of indexChannel = 18,  applyMsgvalCOmmandidx=19
+Apply:: key=3, val= & My(3) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+JE SIR==  {Append 4 x 4 0 y 1769915672299364627}
+*** Yeah Same id PutAppend == 1769915672299364627
+db[4]=x 4 0 y now
+server(0) replied True and PutAppendReply={false OK}
+x 4 1 y
+SENT COMMAND
+
+okay I(3) am gonna send command = {Get 4  977456334777626116}, to channel
+SENT COMMAND
+
+okay I(3) am gonna send command = {Get 2  468329378926607851}, to channel
+raft server(3) sent entry {true {Get 4  977456334777626116} 20} on channel
+length of indexChannel = 19,  applyMsgvalCOmmandidx=20
+Apply:: key=4, val= & My(3) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+raft server(3) sent entry {true {Get 2  468329378926607851} 21} on channel
+length of indexChannel = 20,  applyMsgvalCOmmandidx=21
+Apply:: key=2, val= & My(3) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+{Get 1  1644622612616059081}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1} {{Get 4  977456334777626116} 0 1} {{Get 2  468329378926607851} 0 1} {{Get 1  2666063499653400766} 0 1} {{Get 0  1326356537185846927} 0 1} {{Append 4 x 4 0 y 1769915672299364627} 0 1} {{Get 2  487221198254046600} 0 1} {{Get 1  1644622612616059081} 0 1}]
+26
+{Append 0 x 0 1 y 3500120913813615901}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1} {{Get 4  977456334777626116} 0 1} {{Get 2  468329378926607851} 0 1} {{Get 1  2666063499653400766} 0 1} {{Get 0  1326356537185846927} 0 1} {{Append 4 x 4 0 y 1769915672299364627} 0 1} {{Get 2  487221198254046600} 0 1} {{Get 1  1644622612616059081} 0 1} {{Append 0 x 0 1 y 3500120913813615901} 0 1}]
+Me(1):: raftindex=27, term=1, isLeader=true
+SENT COMMAND
+
+27
+{Append 4 x 4 1 y 2696163819994177641}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1} {{Get 4  977456334777626116} 0 1} {{Get 2  468329378926607851} 0 1} {{Get 1  2666063499653400766} 0 1} {{Get 0  1326356537185846927} 0 1} {{Append 4 x 4 0 y 1769915672299364627} 0 1} {{Get 2  487221198254046600} 0 1} {{Get 1  1644622612616059081} 0 1} {{Append 0 x 0 1 y 3500120913813615901} 0 1} {{Append 4 x 4 1 y 2696163819994177641} 0 1}]
+Me(1):: raftindex=28, term=1, isLeader=true
+28
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+{Put 3  48628758233258999}
+Me(3):: raftindex=-1, term=1, isLeader=false
+Me(3)PutAppend, returning False rightway.
+PutAppend did not work for server (0) .. Reply == {true ErrNoKey}!!!
+{Put 3  48628758233258999}
+Me(4):: raftindex=-1, term=1, isLeader=false
+Me(4)PutAppend, returning False rightway.
+PutAppend did not work for server (1) .. Reply == {false ErrNoKey}!!!
+{Put 3  48628758233258999}
+Me(0):: raftindex=-1, term=1, isLeader=false
+Me(0)PutAppend, returning False rightway.
+PutAppend did not work for server (2) .. Reply == {true ErrNoKey}!!!
+{Put 3  48628758233258999}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1} {{Get 4  977456334777626116} 0 1} {{Get 2  468329378926607851} 0 1} {{Get 1  2666063499653400766} 0 1} {{Get 0  1326356537185846927} 0 1} {{Append 4 x 4 0 y 1769915672299364627} 0 1} {{Get 2  487221198254046600} 0 1} {{Get 1  1644622612616059081} 0 1} {{Append 0 x 0 1 y 3500120913813615901} 0 1} {{Append 4 x 4 1 y 2696163819994177641} 0 1} {{Put 3  48628758233258999} 0 1}]
+Me(1):: raftindex=29, term=1, isLeader=true
+29
+---------------------------------------------------
+okay I(4) am gonna send command = {Get 1  2666063499653400766}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Get 0  1326356537185846927}, to channel
+okay I(2) am gonna send command = {Get 1  2666063499653400766}, to channel
+SENT COMMAND
+
+okay I(2) am gonna send command = {Get 0  1326356537185846927}, to channel
+raft server(2) sent entry {true {Get 1  2666063499653400766} 22} on channel
+length of indexChannel = 21,  applyMsgvalCOmmandidx=22
+Apply:: key=1, val= & My(2) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+raft server(2) sent entry {true {Get 0  1326356537185846927} 23} on channel
+length of indexChannel = 22,  applyMsgvalCOmmandidx=23
+Apply:: key=0, val= & My(2) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+SENT COMMAND
+
+okay I(2) am gonna send command = {Append 4 x 4 0 y 1769915672299364627}, to channel
+SENT COMMAND
+
+okay I(3) am gonna send command = {Get 1  2666063499653400766}, to channel
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+raft server(4) sent entry {true {Get 1  2666063499653400766} 22} on channel
+length of indexChannel = 21,  applyMsgvalCOmmandidx=22
+Apply:: key=1, val= & My(4) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+raft server(4) sent entry {true {Get 0  1326356537185846927} 23} on channel
+length of indexChannel = 22,  applyMsgvalCOmmandidx=23
+Apply:: key=0, val= & My(4) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+SENT COMMAND
+
+okay I(3) am gonna send command = {Get 0  1326356537185846927}, to channel
+raft server(3) sent entry {true {Get 1  2666063499653400766} 22} on channel
+length of indexChannel = 21,  applyMsgvalCOmmandidx=22
+Apply:: key=1, val= & My(3) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+okay I(0) am gonna send command = {Get 1  2666063499653400766}, to channel
+SENT COMMAND
+
+okay I(0) am gonna send command = {Get 0  1326356537185846927}, to channel
+raft server(3) sent entry {true {Get 0  1326356537185846927} 23} on channel
+length of indexChannel = 22,  applyMsgvalCOmmandidx=23
+Apply:: key=0, val= & My(3) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+SENT COMMAND
+
+okay I(4) am gonna send command = {Append 4 x 4 0 y 1769915672299364627}, to channel
+SENT COMMAND
+
+raft server(4) sent entry {true {Append 4 x 4 0 y 1769915672299364627} 24} on channel
+length of indexChannel = 23,  applyMsgvalCOmmandidx=24
+Apply:: key=4, val=x 4 0 y & My(4) db looks like = map[0:x 0 0 y 1: 2: 3: 4:x 4 0 y]
+false
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+okay I(1) am gonna send command = {Get 2  487221198254046600}, to channel
+SENT COMMAND
+
+okay I(1) am gonna send command = {Get 1  1644622612616059081}, to channel
+raft server(0) sent entry {true {Get 1  2666063499653400766} 22} on channel
+length of indexChannel = 21,  applyMsgvalCOmmandidx=22
+Apply:: key=1, val= & My(0) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+raft server(0) sent entry {true {Get 0  1326356537185846927} 23} on channel
+length of indexChannel = 22,  applyMsgvalCOmmandidx=23
+Apply:: key=0, val= & My(0) db looks like = map[0:x 0 0 y 1: 2: 3: 4:]
+false
+SENT COMMAND
+
+okay I(0) am gonna send command = {Append 4 x 4 0 y 1769915672299364627}, to channel
+SENT COMMAND
+
+raft server(0) sent entry {true {Append 4 x 4 0 y 1769915672299364627} 24} on channel
+length of indexChannel = 23,  applyMsgvalCOmmandidx=24
+Apply:: key=4, val=x 4 0 y & My(0) db looks like = map[0:x 0 0 y 1: 2: 3: 4:x 4 0 y]
+false
+raft server(1) sent entry {true {Get 2  487221198254046600} 25} on channel
+length of indexChannel = 29,  applyMsgvalCOmmandidx=25
+Apply:: key=2, val= & My(1) db looks like = map[0:x 0 0 y 1: 2: 3: 4:x 4 0 y]
+true
+raft server(1) sent entry {true {Get 1  1644622612616059081} 26} on channel
+length of indexChannel = 29,  applyMsgvalCOmmandidx=26
+Apply:: key=1, val= & My(1) db looks like = map[0:x 0 0 y 1: 2: 3: 4:x 4 0 y]
+true
+*** Yeah Same id Get == 1644622612616059081
+db= map[0:x 0 0 y 1: 2: 3: 4:x 4 0 y]
+key= 1
+server(2) replied True {false OK } and reply.value==...gonna return
+*** Yeah Same id Get == 487221198254046600
+db= map[0:x 0 0 y 1: 2: 3: 4:x 4 0 y]
+key= 2
+server(1) replied True {false OK } and reply.value==...gonna return
+raft server(2) sent entry {true {Append 4 x 4 0 y 1769915672299364627} 24} on channel
+length of indexChannel = 23,  applyMsgvalCOmmandidx=24
+Apply:: key=4, val=x 4 0 y & My(2) db looks like = map[0:x 0 0 y 1: 2: 3: 4:x 4 0 y]
+false
+SENT COMMAND
+
+okay I(3) am gonna send command = {Append 4 x 4 0 y 1769915672299364627}, to channel
+SENT COMMAND
+
+raft server(3) sent entry {true {Append 4 x 4 0 y 1769915672299364627} 24} on channel
+length of indexChannel = 23,  applyMsgvalCOmmandidx=24
+Apply:: key=4, val=x 4 0 y & My(3) db looks like = map[0:x 0 0 y 1: 2: 3: 4:x 4 0 y]
+false
+SENT COMMAND
+
+okay I(1) am gonna send command = {Append 0 x 0 1 y 3500120913813615901}, to channel
+SENT COMMAND
+
+okay I(1) am gonna send command = {Append 4 x 4 1 y 2696163819994177641}, to channel
+raft server(1) sent entry {true {Append 0 x 0 1 y 3500120913813615901} 27} on channel
+length of indexChannel = 29,  applyMsgvalCOmmandidx=27
+Apply:: key=0, val=x 0 1 y & My(1) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 y]
+true
+raft server(1) sent entry {true {Append 4 x 4 1 y 2696163819994177641} 28} on channel
+length of indexChannel = 29,  applyMsgvalCOmmandidx=28
+Apply:: key=4, val=x 4 1 y & My(1) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 y]
+true
+JE SIR==  {Append 4 x 4 1 y 2696163819994177641}
+*** Yeah Same id PutAppend == 2696163819994177641
+db[4]=x 4 0 yx 4 1 y now
+server(0) replied True and PutAppendReply={false OK}
+x 4 2 y
+SENT COMMAND
+
+okay I(1) am gonna send command = {Put 3  48628758233258999}, to channel
+SENT COMMAND
+
+{Append 4 x 4 2 y 3854470601137032045}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1} {{Get 4  977456334777626116} 0 1} {{Get 2  468329378926607851} 0 1} {{Get 1  2666063499653400766} 0 1} {{Get 0  1326356537185846927} 0 1} {{Append 4 x 4 0 y 1769915672299364627} 0 1} {{Get 2  487221198254046600} 0 1} {{Get 1  1644622612616059081} 0 1} {{Append 0 x 0 1 y 3500120913813615901} 0 1} {{Append 4 x 4 1 y 2696163819994177641} 0 1} {{Put 3  48628758233258999} 0 1} {{Append 4 x 4 2 y 3854470601137032045} 0 1}]
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+{Get 1  3661316037458649602}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1} {{Get 4  977456334777626116} 0 1} {{Get 2  468329378926607851} 0 1} {{Get 1  2666063499653400766} 0 1} {{Get 0  1326356537185846927} 0 1} {{Append 4 x 4 0 y 1769915672299364627} 0 1} {{Get 2  487221198254046600} 0 1} {{Get 1  1644622612616059081} 0 1} {{Append 0 x 0 1 y 3500120913813615901} 0 1} {{Append 4 x 4 1 y 2696163819994177641} 0 1} {{Put 3  48628758233258999} 0 1} {{Append 4 x 4 2 y 3854470601137032045} 0 1} {{Get 1  3661316037458649602} 0 1}]
+{Get 2  3602563787832741600}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1} {{Get 4  977456334777626116} 0 1} {{Get 2  468329378926607851} 0 1} {{Get 1  2666063499653400766} 0 1} {{Get 0  1326356537185846927} 0 1} {{Append 4 x 4 0 y 1769915672299364627} 0 1} {{Get 2  487221198254046600} 0 1} {{Get 1  1644622612616059081} 0 1} {{Append 0 x 0 1 y 3500120913813615901} 0 1} {{Append 4 x 4 1 y 2696163819994177641} 0 1} {{Put 3  48628758233258999} 0 1} {{Append 4 x 4 2 y 3854470601137032045} 0 1} {{Get 1  3661316037458649602} 0 1} {{Get 2  3602563787832741600} 0 1}]
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+raft server(1) sent entry {true {Put 3  48628758233258999} 29} on channel
+length of indexChannel = 29,  applyMsgvalCOmmandidx=29
+Apply:: key=3, val= & My(1) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 y]
+true
+Me(1):: raftindex=30, term=1, isLeader=true
+30
+31
+32
+JE SIR==  {Append 0 x 0 1 y 3500120913813615901}
+*** Yeah Same id PutAppend == 3500120913813615901
+db[0]=x 0 0 yx 0 1 y now
+PutAppend did not work for server (1) .. Reply == {false ErrNoKey}!!!
+JE SIR==  {Put 3  48628758233258999}
+*** Yeah Same id PutAppend == 48628758233258999
+db[3]= now
+server(3) replied True and PutAppendReply={false OK}
+x 3 0 y
+---------------------------------------------------
+{Append 0 x 0 1 y 3500120913813615901}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1} {{Get 4  977456334777626116} 0 1} {{Get 2  468329378926607851} 0 1} {{Get 1  2666063499653400766} 0 1} {{Get 0  1326356537185846927} 0 1} {{Append 4 x 4 0 y 1769915672299364627} 0 1} {{Get 2  487221198254046600} 0 1} {{Get 1  1644622612616059081} 0 1} {{Append 0 x 0 1 y 3500120913813615901} 0 1} {{Append 4 x 4 1 y 2696163819994177641} 0 1} {{Put 3  48628758233258999} 0 1} {{Append 4 x 4 2 y 3854470601137032045} 0 1} {{Get 1  3661316037458649602} 0 1} {{Get 2  3602563787832741600} 0 1} {{Append 0 x 0 1 y 3500120913813615901} 0 1}]
+Me(1):: raftindex=33, term=1, isLeader=true
+33
+{Append 3 x 3 0 y 1229439743016014913}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1} {{Get 4  977456334777626116} 0 1} {{Get 2  468329378926607851} 0 1} {{Get 1  2666063499653400766} 0 1} {{Get 0  1326356537185846927} 0 1} {{Append 4 x 4 0 y 1769915672299364627} 0 1} {{Get 2  487221198254046600} 0 1} {{Get 1  1644622612616059081} 0 1} {{Append 0 x 0 1 y 3500120913813615901} 0 1} {{Append 4 x 4 1 y 2696163819994177641} 0 1} {{Put 3  48628758233258999} 0 1} {{Append 4 x 4 2 y 3854470601137032045} 0 1} {{Get 1  3661316037458649602} 0 1} {{Get 2  3602563787832741600} 0 1} {{Append 0 x 0 1 y 3500120913813615901} 0 1} {{Append 3 x 3 0 y 1229439743016014913} 0 1}]
+Me(1):: raftindex=34, term=1, isLeader=true
+34
+okay I(4) am gonna send command = {Get 2  487221198254046600}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Get 1  1644622612616059081}, to channel
+raft server(4) sent entry {true {Get 2  487221198254046600} 25} on channel
+length of indexChannel = 24,  applyMsgvalCOmmandidx=25
+Apply:: key=2, val= & My(4) db looks like = map[0:x 0 0 y 1: 2: 3: 4:x 4 0 y]
+false
+raft server(4) sent entry {true {Get 1  1644622612616059081} 26} on channel
+length of indexChannel = 25,  applyMsgvalCOmmandidx=26
+Apply:: key=1, val= & My(4) db looks like = map[0:x 0 0 y 1: 2: 3: 4:x 4 0 y]
+false
+okay I(3) am gonna send command = {Get 2  487221198254046600}, to channel
+SENT COMMAND
+
+okay I(3) am gonna send command = {Get 1  1644622612616059081}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Append 0 x 0 1 y 3500120913813615901}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Append 4 x 4 1 y 2696163819994177641}, to channel
+raft server(3) sent entry {true {Get 2  487221198254046600} 25} on channel
+length of indexChannel = 24,  applyMsgvalCOmmandidx=25
+okay I(0) am gonna send command = {Get 2  487221198254046600}, to channel
+Apply:: key=2, val= & My(3) db looks like = map[0:x 0 0 y 1: 2: 3: 4:x 4 0 y]
+false
+raft server(3) sent entry {true {Get 1  1644622612616059081} 26} on channel
+length of indexChannel = 25,  applyMsgvalCOmmandidx=26
+Apply:: key=1, val= & My(3) db looks like = map[0:x 0 0 y 1: 2: 3: 4:x 4 0 y]
+false
+raft server(4) sent entry {true {Append 0 x 0 1 y 3500120913813615901} 27} on channel
+length of indexChannel = 26,  applyMsgvalCOmmandidx=27
+Apply:: key=0, val=x 0 1 y & My(4) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 y]
+false
+raft server(4) sent entry {true {Append 4 x 4 1 y 2696163819994177641} 28} on channel
+length of indexChannel = 27,  applyMsgvalCOmmandidx=28
+Apply:: key=4, val=x 4 1 y & My(4) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 y]
+false
+okay I(2) am gonna send command = {Get 2  487221198254046600}, to channel
+SENT COMMAND
+
+raft server(2) sent entry {true {Get 2  487221198254046600} 25} on channel
+length of indexChannel = 24,  applyMsgvalCOmmandidx=25
+Apply:: key=2, val= & My(2) db looks like = map[0:x 0 0 y 1: 2: 3: 4:x 4 0 y]
+false
+okay I(2) am gonna send command = {Get 1  1644622612616059081}, to channel
+SENT COMMAND
+
+SENT COMMAND
+
+okay I(3) am gonna send command = {Append 0 x 0 1 y 3500120913813615901}, to channel
+SENT COMMAND
+
+okay I(3) am gonna send command = {Append 4 x 4 1 y 2696163819994177641}, to channel
+okay I(2) am gonna send command = {Append 0 x 0 1 y 3500120913813615901}, to channel
+SENT COMMAND
+
+okay I(0) am gonna send command = {Get 1  1644622612616059081}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Put 3  48628758233258999}, to channel
+SENT COMMAND
+
+raft server(0) sent entry {true {Get 2  487221198254046600} 25} on channel
+length of indexChannel = 24,  applyMsgvalCOmmandidx=25
+Apply:: key=2, val= & My(0) db looks like = map[0:x 0 0 y 1: 2: 3: 4:x 4 0 y]
+false
+raft server(3) sent entry {true {Append 0 x 0 1 y 3500120913813615901} 27} on channel
+length of indexChannel = 26,  applyMsgvalCOmmandidx=27
+Apply:: key=0, val=x 0 1 y & My(3) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 y]
+false
+raft server(3) sent entry {true {Append 4 x 4 1 y 2696163819994177641} 28} on channel
+length of indexChannel = 27,  applyMsgvalCOmmandidx=28
+Apply:: key=4, val=x 4 1 y & My(3) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 y]
+false
+raft server(4) sent entry {true {Put 3  48628758233258999} 29} on channel
+length of indexChannel = 28,  applyMsgvalCOmmandidx=29
+Apply:: key=3, val= & My(4) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 y]
+false
+raft server(2) sent entry {true {Get 1  1644622612616059081} 26} on channel
+length of indexChannel = 25,  applyMsgvalCOmmandidx=26
+Apply:: key=1, val= & My(2) db looks like = map[0:x 0 0 y 1: 2: 3: 4:x 4 0 y]
+false
+raft server(0) sent entry {true {Get 1  1644622612616059081} 26} on channel
+length of indexChannel = 25,  applyMsgvalCOmmandidx=26
+Apply:: key=1, val= & My(0) db looks like = map[0:x 0 0 y 1: 2: 3: 4:x 4 0 y]
+false
+SENT COMMAND
+
+okay I(2) am gonna send command = {Append 4 x 4 1 y 2696163819994177641}, to channel
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+raft server(2) sent entry {true {Append 0 x 0 1 y 3500120913813615901} 27} on channel
+length of indexChannel = 26,  applyMsgvalCOmmandidx=27
+SENT COMMAND
+
+okay I(0) am gonna send command = {Append 0 x 0 1 y 3500120913813615901}, to channel
+SENT COMMAND
+
+okay I(0) am gonna send command = {Append 4 x 4 1 y 2696163819994177641}, to channel
+SENT COMMAND
+
+okay I(3) am gonna send command = {Put 3  48628758233258999}, to channel
+SENT COMMAND
+
+raft server(3) sent entry {true {Put 3  48628758233258999} 29} on channel
+length of indexChannel = 28,  applyMsgvalCOmmandidx=29
+Apply:: key=3, val= & My(3) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 y]
+false
+Apply:: key=0, val=x 0 1 y & My(2) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 y]
+false
+raft server(2) sent entry {true {Append 4 x 4 1 y 2696163819994177641} 28} on channel
+length of indexChannel = 27,  applyMsgvalCOmmandidx=28
+Apply:: key=4, val=x 4 1 y & My(2) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 y]
+false
+raft server(0) sent entry {true {Append 0 x 0 1 y 3500120913813615901} 27} on channel
+length of indexChannel = 26,  applyMsgvalCOmmandidx=27
+SENT COMMAND
+
+okay I(2) am gonna send command = {Put 3  48628758233258999}, to channel
+SENT COMMAND
+
+raft server(2) sent entry {true {Put 3  48628758233258999} 29} on channel
+length of indexChannel = 28,  applyMsgvalCOmmandidx=29
+Apply:: key=3, val= & My(2) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 y]
+false
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+okay I(1) am gonna send command = {Append 4 x 4 2 y 3854470601137032045}, to channel
+SENT COMMAND
+
+okay I(1) am gonna send command = {Get 1  3661316037458649602}, to channel
+Apply:: key=0, val=x 0 1 y & My(0) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 y]
+false
+raft server(0) sent entry {true {Append 4 x 4 1 y 2696163819994177641} 28} on channel
+length of indexChannel = 27,  applyMsgvalCOmmandidx=28
+Apply:: key=4, val=x 4 1 y & My(0) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 y]
+false
+raft server(1) sent entry {true {Append 4 x 4 2 y 3854470601137032045} 30} on channel
+length of indexChannel = 34,  applyMsgvalCOmmandidx=30
+Apply:: key=4, val=x 4 2 y & My(1) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+true
+raft server(1) sent entry {true {Get 1  3661316037458649602} 31} on channel
+length of indexChannel = 34,  applyMsgvalCOmmandidx=31
+Apply:: key=1, val= & My(1) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+true
+*** Yeah Same id Get == 3661316037458649602
+db= map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+key= 1
+server(2) replied True {false OK } and reply.value==...gonna return
+SENT COMMAND
+
+okay I(0) am gonna send command = {Put 3  48628758233258999}, to channel
+SENT COMMAND
+
+JE SIR==  {Append 4 x 4 2 y 3854470601137032045}
+*** Yeah Same id PutAppend == 3854470601137032045
+db[4]=x 4 0 yx 4 1 yx 4 2 y now
+server(0) replied True and PutAppendReply={false OK}
+SENT COMMAND
+
+okay I(1) am gonna send command = {Get 2  3602563787832741600}, to channel
+SENT COMMAND
+
+okay I(1) am gonna send command = {Append 0 x 0 1 y 3500120913813615901}, to channel
+raft server(0) sent entry {true {Put 3  48628758233258999} 29} on channel
+length of indexChannel = 28,  applyMsgvalCOmmandidx=29
+Apply:: key=3, val= & My(0) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 y]
+false
+raft server(1) sent entry {true {Get 2  3602563787832741600} 32} on channel
+length of indexChannel = 34,  applyMsgvalCOmmandidx=32
+Apply:: key=2, val= & My(1) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+true
+raft server(1) sent entry {true {Append 0 x 0 1 y 3500120913813615901} 33} on channel
+length of indexChannel = 34,  applyMsgvalCOmmandidx=33
+Apply:: key=0, val=x 0 1 y & My(1) db looks like = map[0:x 0 0 yx 0 1 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+true
+JE SIR==  {Append 0 x 0 1 y 3500120913813615901}
+*** Yeah Same id PutAppend == 3500120913813615901
+db[0]=x 0 0 yx 0 1 yx 0 1 y now
+server(1) replied True and PutAppendReply={false OK}
+*** Yeah Same id Get == 3602563787832741600
+db= map[0:x 0 0 yx 0 1 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+key= 2
+server(1) replied True {false OK } and reply.value==...gonna return
+SENT COMMAND
+
+okay I(1) am gonna send command = {Append 3 x 3 0 y 1229439743016014913}, to channel
+SENT COMMAND
+
+raft server(1) sent entry {true {Append 3 x 3 0 y 1229439743016014913} 34} on channel
+length of indexChannel = 34,  applyMsgvalCOmmandidx=34
+Apply:: key=3, val=x 3 0 y & My(1) db looks like = map[0:x 0 0 yx 0 1 yx 0 1 y 1: 2: 3:x 3 0 y 4:x 4 0 yx 4 1 yx 4 2 y]
+true
+JE SIR==  {Append 3 x 3 0 y 1229439743016014913}
+*** Yeah Same id PutAppend == 1229439743016014913
+db[3]=x 3 0 y now
+PutAppend did not work for server (3) .. Reply == {false ErrNoKey}!!!
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+{Get 0  135352572705455951}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1} {{Get 4  977456334777626116} 0 1} {{Get 2  468329378926607851} 0 1} {{Get 1  2666063499653400766} 0 1} {{Get 0  1326356537185846927} 0 1} {{Append 4 x 4 0 y 1769915672299364627} 0 1} {{Get 2  487221198254046600} 0 1} {{Get 1  1644622612616059081} 0 1} {{Append 0 x 0 1 y 3500120913813615901} 0 1} {{Append 4 x 4 1 y 2696163819994177641} 0 1} {{Put 3  48628758233258999} 0 1} {{Append 4 x 4 2 y 3854470601137032045} 0 1} {{Get 1  3661316037458649602} 0 1} {{Get 2  3602563787832741600} 0 1} {{Append 0 x 0 1 y 3500120913813615901} 0 1} {{Append 3 x 3 0 y 1229439743016014913} 0 1} {{Get 0  135352572705455951} 0 1}]
+35
+{Append 3 x 3 0 y 1229439743016014913}
+Me(4):: raftindex=-1, term=1, isLeader=false
+Me(4)PutAppend, returning False rightway.
+PutAppend did not work for server (1) .. Reply == {true ErrNoKey}!!!
+{Append 3 x 3 0 y 1229439743016014913}
+Me(0):: raftindex=-1, term=1, isLeader=false
+Me(0)PutAppend, returning False rightway.
+PutAppend did not work for server (2) .. Reply == {true ErrNoKey}!!!
+---------------------------------------------------
+{Append 3 x 3 0 y 1229439743016014913}
+[{{Put 3  3194546619066602912} 0 1} {{Put 1  71300870958364808} 0 1} {{Put 4  3112828873499867471} 0 1} {{Put 2  4411228910934756952} 0 1} {{Put 0  4446850181468810480} 0 1} {{Get 0  1061282906997500477} 0 1} {{Get 1  3001612139557243495} 0 1} {{Get 2  403514245095688083} 0 1} {{Get 3  2190113532958391048} 0 1} {{Get 4  1455746235410270258} 0 1} {{Put 2  1912452408401146142} 0 1} {{Put 0  1246767324458061701} 0 1} {{Put 1  904240132544189187} 0 1} {{Put 4  4606891641184670124} 0 1} {{Get 0  2877360513208642589} 0 1} {{Get 2  468329378926607851} 0 1} {{Append 0 x 0 0 y 1314806190894946817} 0 1} {{Get 1  1164828912374957892} 0 1} {{Put 3  48628758233258999} 0 1} {{Get 4  977456334777626116} 0 1} {{Get 2  468329378926607851} 0 1} {{Get 1  2666063499653400766} 0 1} {{Get 0  1326356537185846927} 0 1} {{Append 4 x 4 0 y 1769915672299364627} 0 1} {{Get 2  487221198254046600} 0 1} {{Get 1  1644622612616059081} 0 1} {{Append 0 x 0 1 y 3500120913813615901} 0 1} {{Append 4 x 4 1 y 2696163819994177641} 0 1} {{Put 3  48628758233258999} 0 1} {{Append 4 x 4 2 y 3854470601137032045} 0 1} {{Get 1  3661316037458649602} 0 1} {{Get 2  3602563787832741600} 0 1} {{Append 0 x 0 1 y 3500120913813615901} 0 1} {{Append 3 x 3 0 y 1229439743016014913} 0 1} {{Get 0  135352572705455951} 0 1} {{Append 3 x 3 0 y 1229439743016014913} 0 1}]
+Me(1):: raftindex=36, term=1, isLeader=true
+36
+&{0 false}
+&{0 false}
+okay I(3) am gonna send command = {Append 4 x 4 2 y 3854470601137032045}, to channel
+SENT COMMAND
+
+okay I(3) am gonna send command = {Get 1  3661316037458649602}, to channel
+okay I(0) am gonna send command = {Append 4 x 4 2 y 3854470601137032045}, to channel
+SENT COMMAND
+
+okay I(0) am gonna send command = {Get 1  3661316037458649602}, to channel
+raft server(3) sent entry {true {Append 4 x 4 2 y 3854470601137032045} 30} on channel
+length of indexChannel = 29,  applyMsgvalCOmmandidx=30
+Apply:: key=4, val=x 4 2 y & My(3) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+raft server(3) sent entry {true {Get 1  3661316037458649602} 31} on channel
+length of indexChannel = 30,  applyMsgvalCOmmandidx=31
+Apply:: key=1, val= & My(3) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+raft server(0) sent entry {true {Append 4 x 4 2 y 3854470601137032045} 30} on channel
+length of indexChannel = 29,  applyMsgvalCOmmandidx=30
+Apply:: key=4, val=x 4 2 y & My(0) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+raft server(0) sent entry {true {Get 1  3661316037458649602} 31} on channel
+length of indexChannel = 30,  applyMsgvalCOmmandidx=31
+Apply:: key=1, val= & My(0) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+SENT COMMAND
+
+okay I(3) am gonna send command = {Get 2  3602563787832741600}, to channel
+SENT COMMAND
+
+okay I(3) am gonna send command = {Append 0 x 0 1 y 3500120913813615901}, to channel
+SENT COMMAND
+
+okay I(0) am gonna send command = {Get 2  3602563787832741600}, to channel
+SENT COMMAND
+
+okay I(0) am gonna send command = {Append 0 x 0 1 y 3500120913813615901}, to channel
+raft server(3) sent entry {true {Get 2  3602563787832741600} 32} on channel
+length of indexChannel = 31,  applyMsgvalCOmmandidx=32
+Apply:: key=2, val= & My(3) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+raft server(3) sent entry {true {Append 0 x 0 1 y 3500120913813615901} 33} on channel
+length of indexChannel = 32,  applyMsgvalCOmmandidx=33
+Apply:: key=0, val=x 0 1 y & My(3) db looks like = map[0:x 0 0 yx 0 1 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+raft server(0) sent entry {true {Get 2  3602563787832741600} 32} on channel
+length of indexChannel = 31,  applyMsgvalCOmmandidx=32
+Apply:: key=2, val= & My(0) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+raft server(0) sent entry {true {Append 0 x 0 1 y 3500120913813615901} 33} on channel
+length of indexChannel = 32,  applyMsgvalCOmmandidx=33
+Apply:: key=0, val=x 0 1 y & My(0) db looks like = map[0:x 0 0 yx 0 1 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+SENT COMMAND
+
+okay I(3) am gonna send command = {Append 3 x 3 0 y 1229439743016014913}, to channel
+SENT COMMAND
+
+&{0 false}
+SENT COMMAND
+
+okay I(0) am gonna send command = {Append 3 x 3 0 y 1229439743016014913}, to channel
+SENT COMMAND
+
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+raft server(0) sent entry {true {Append 3 x 3 0 y 1229439743016014913} 34} on channel
+length of indexChannel = 33,  applyMsgvalCOmmandidx=34
+Apply:: key=3, val=x 3 0 y & My(0) db looks like = map[0:x 0 0 yx 0 1 yx 0 1 y 1: 2: 3:x 3 0 y 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+raft server(3) sent entry {true {Append 3 x 3 0 y 1229439743016014913} 34} on channel
+length of indexChannel = 33,  applyMsgvalCOmmandidx=34
+Apply:: key=3, val=x 3 0 y & My(3) db looks like = map[0:x 0 0 yx 0 1 yx 0 1 y 1: 2: 3:x 3 0 y 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+---------------------------------------------------
+okay I(4) am gonna send command = {Append 4 x 4 2 y 3854470601137032045}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Get 1  3661316037458649602}, to channel
+&{0 false}
+raft server(4) sent entry {true {Append 4 x 4 2 y 3854470601137032045} 30} on channel
+&{0 false}
+length of indexChannel = 29,  applyMsgvalCOmmandidx=30
+Apply:: key=4, val=x 4 2 y & My(4) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+raft server(4) sent entry {true {Get 1  3661316037458649602} 31} on channel
+length of indexChannel = 30,  applyMsgvalCOmmandidx=31
+Apply:: key=1, val= & My(4) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+okay I(2) am gonna send command = {Append 4 x 4 2 y 3854470601137032045}, to channel
+SENT COMMAND
+
+okay I(2) am gonna send command = {Get 1  3661316037458649602}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Get 2  3602563787832741600}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Append 0 x 0 1 y 3500120913813615901}, to channel
+raft server(2) sent entry {true {Append 4 x 4 2 y 3854470601137032045} 30} on channel
+length of indexChannel = 29,  applyMsgvalCOmmandidx=30
+Apply:: key=4, val=x 4 2 y & My(2) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+raft server(2) sent entry {true {Get 1  3661316037458649602} 31} on channel
+length of indexChannel = 30,  applyMsgvalCOmmandidx=31
+Apply:: key=1, val= & My(2) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+raft server(4) sent entry {true {Get 2  3602563787832741600} 32} on channel
+length of indexChannel = 31,  applyMsgvalCOmmandidx=32
+Apply:: key=2, val= & My(4) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+raft server(4) sent entry {true {Append 0 x 0 1 y 3500120913813615901} 33} on channel
+length of indexChannel = 32,  applyMsgvalCOmmandidx=33
+Apply:: key=0, val=x 0 1 y & My(4) db looks like = map[0:x 0 0 yx 0 1 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+SENT COMMAND
+
+okay I(2) am gonna send command = {Get 2  3602563787832741600}, to channel
+SENT COMMAND
+
+okay I(2) am gonna send command = {Append 0 x 0 1 y 3500120913813615901}, to channel
+SENT COMMAND
+
+okay I(4) am gonna send command = {Append 3 x 3 0 y 1229439743016014913}, to channel
+SENT COMMAND
+
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+ in Majority looop !!
+ in Majority looop !!
+okay I(1) am gonna send command = {Get 0  135352572705455951}, to channel
+SENT COMMAND
+
+okay I(1) am gonna send command = {Append 3 x 3 0 y 1229439743016014913}, to channel
+raft server(1) sent entry {true {Get 0  135352572705455951} 35} on channel
+length of indexChannel = 36,  applyMsgvalCOmmandidx=35
+Apply:: key=0, val= & My(1) db looks like = map[0:x 0 0 yx 0 1 yx 0 1 y 1: 2: 3:x 3 0 y 4:x 4 0 yx 4 1 yx 4 2 y]
+true
+raft server(1) sent entry {true {Append 3 x 3 0 y 1229439743016014913} 36} on channel
+length of indexChannel = 36,  applyMsgvalCOmmandidx=36
+Apply:: key=3, val=x 3 0 y & My(1) db looks like = map[0:x 0 0 yx 0 1 yx 0 1 y 1: 2: 3:x 3 0 yx 3 0 y 4:x 4 0 yx 4 1 yx 4 2 y]
+true
+JE SIR==  {Append 3 x 3 0 y 1229439743016014913}
+*** Yeah Same id PutAppend == 1229439743016014913
+db[3]=x 3 0 yx 3 0 y now
+PutAppend did not work for server (3) .. Reply == {false ErrNoKey}!!!
+*** Yeah Same id Get == 135352572705455951
+db= map[0:x 0 0 yx 0 1 yx 0 1 y 1: 2: 3:x 3 0 yx 3 0 y 4:x 4 0 yx 4 1 yx 4 2 y]
+key= 0
+server(3) replied True {false OK x 0 0 yx 0 1 yx 0 1 y} and reply.value==x 0 0 yx 0 1 yx 0 1 y...gonna return
+raft server(2) sent entry {true {Get 2  3602563787832741600} 32} on channel
+length of indexChannel = 31,  applyMsgvalCOmmandidx=32
+Apply:: key=2, val= & My(2) db looks like = map[0:x 0 0 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+raft server(4) sent entry {true {Append 3 x 3 0 y 1229439743016014913} 34} on channel
+length of indexChannel = 33,  applyMsgvalCOmmandidx=34
+Apply:: key=3, val=x 3 0 y & My(4) db looks like = map[0:x 0 0 yx 0 1 yx 0 1 y 1: 2: 3:x 3 0 y 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+SENT COMMAND
+
+raft server(2) sent entry {true {Append 0 x 0 1 y 3500120913813615901} 33} on channel
+length of indexChannel = 32,  applyMsgvalCOmmandidx=33
+Apply:: key=0, val=x 0 1 y & My(2) db looks like = map[0:x 0 0 yx 0 1 yx 0 1 y 1: 2: 3: 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+SENT COMMAND
+
+okay I(2) am gonna send command = {Append 3 x 3 0 y 1229439743016014913}, to channel
+SENT COMMAND
+
+raft server(2) sent entry {true {Append 3 x 3 0 y 1229439743016014913} 34} on channel
+length of indexChannel = 33,  applyMsgvalCOmmandidx=34
+Apply:: key=3, val=x 3 0 y & My(2) db looks like = map[0:x 0 0 yx 0 1 yx 0 1 y 1: 2: 3:x 3 0 y 4:x 4 0 yx 4 1 yx 4 2 y]
+false
+&{1 true}
+ Gonna Update Commit Index, let see !!!!!!!!!!!!!!
+ Got lock for Commit Index, let see !!!!!!!!!!!!!!
+ in Majority looop !!
+--- FAIL: TestUnreliable3A (72.14s)
+    test_test.go:91: duplicate element x 0 1 y in Append result
+FAIL
+exit status 1
+FAIL	kvraft	72.149s

@@ -1,0 +1,340 @@
+Success-debug
+++++++++++++++++++++++++++++++++++++++++++++++++
+Leader:1 term=1
+2 has been disconnected
+so after 102, its index is 1 while server0 is having nextindex=2
+
+todo uncomment rf.sendAppenEntries right after being a leader.
+todo I have put apply in every server, now you need to study log why is it not reaching an agreement?
+todo also change apply from i to i+1
+
+Candidate
+
+    --> 2 is candidate again for term = 2 - i think it should not get elected
+    so 2 is trying again&again till term 5 but failed.
+    but since we are getting majority votes, hence we are passing the tests.
+
+
+Failure-debug
+++++++++++++++++++++++++++++++++++++++++++++++++
+Leader:0 term=1
+1 got disconnected
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Success-debug
+++++++++++++++++++++++++++++++++++++++++++++++++
+Leader:0 term=1
+
+
+
+1 has been disconnected
+but since we dont sleep that much, whenever it gets connected, it received all the trailing entries at once. it hasnt timed out
+and its log becomes upto date in once appendEntriesCall.
+
+
+
+todo check why disconnected 2 did not vote for more uptodate leader 1
+todo why nextix of disconnected 2 is set to same as otherone even though he did not vote and his log is stale?
+
+Failure-debug
+++++++++++++++++++++++++++++++++++++++++++++++++
+Leader:0 term=1
+
+101 is committed by all 3
+Now leader(0) would be disconnected.
+But that MF has got 102 in his log unable to communicate to other. hence unable to update its commit.
+
+candidate->
+    Leader=2 term=2
+
+    Leader 2 commits 101, 103
+    & then get disconnected
+dbff
+    Now Server 1 Logs =[{101,0,1},{103,0,2}]
+
+old leader (0) receives 104 and his log is [{101 0 1} {102 0 1} {104 0 1}]
+Leader(o) old receives 104. server 1 rejects becasue he is on term 2-- causing 0 to step down.
+
+weired is server 0 is on term 2 ( he stepped down) but did not vote for 1 for term = 3. I think i need to check more up to date check
+in case of term is higher.
+Should be args.LastLogIndex(1)>=rf.myLastLogidx (2): args.LastLogTerm(2) >= rf.currentTerm(2)
+
+
+ERROR
+error: commit index=2 server=0 102 != server=2 103
+//todo I think I have found the error, you do not commit entries that dont belong to your term. fix it.
+Raft determines which of two logs is more up-to-date by comparing the index and term of the last entries in the logs.
+If the logs have last entries with different terms, then the log with the later term is more up-to-date. If the logs end with the same term,
+then which ever log is longer is more up-to-date.
+also I have put a new if condition in the function - receive request vote
+//if ((args.LastLogIndex >= (len(rf.log)-1)) && (args.LastLogTerm >= rf.currentTerm)){
+
+outt-success
+aint committing 102 to pass the test.
+------
+Leader=1 term=1
+server-1 {[101 0 1],[102 0 1]} but got disconnected.
+
+Leader=0 term=2
+    gets 103 and its log is =[{101 0 1} {103 0 2}] && commits 103 using 2
+
+Now Leader(0) is disconnected and Leader(1) is connected back.
+Leader(1) receives 104 and its log is [{101 0 1} {102 0 1} {104 0 1}]
+
+server 2 becomes a leader for term=3
+but old leader 1 did not accept append entries from server 2 as
+ rf.log[1].CommandTerm(1) should == args.PrevLogTerm(2)
+
+PASSED:: Leaers log is =[{101 0 1} {103 0 2} {104 0 3}]
+
+********************************
+outt-fail
+
+Leader=0 term=1
+server-0 {[101 0 1],[102 0 1]} but got disconnected.
+
+
+
+Leader=2 term=2
+    gets 103 and its log is =[{101 0 1} {103 0 2}] && commits 103 using 1
+
+Now Leader(2) is disconnected and Leader(0) is connected back.
+Leader(0) receives 104 and its log is [{101 0 1} {102 0 1} {104 0 1}]
+
+*******************************************
+LONG Failure to reach agreement -- checking
+********************************************
+
+Leader=2, term=1
+server-2 {[101 0 1],[102 0 1]} but got disconnected.
+
+Leader=1 term=2
+recieves 103 and commits it now
+server 1 and server 0 logs look [{101 0 1} {103 0 2}]
+
+
+Server 1 is disconnected and old leader 2 gets 104
+
+
+Leader 2 log is [{101 0 1} {102 0 1} {104 0 1}]
+server 2 steps down and term goes from 1->2
+I think it(0) should get the votes from(2) but args.LastLogTerm(2) >= rf.currentTerm(3) so 0 is rejected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CHANGES<
+if ( (args.LastLogTerm >= rf.currentTerm)) i am gonna comapare the last log idx in both. in requestVotefunc.
+Because I have edited the requstVotestruct to add the entry of last item from the log instead of just one less than
+current term.
+
+
+After above changes, Now I again get error on different commit.
+Leader=1 term=1
+receives 102 and gets disconnected.
+
+
+Leader=0 term=2 commits [{101 0 1} {103 0 2}]
+
+
+
+DEBUGGING FAILED TEST --- TestFailAgree2B -- this was passing before :)
+Leader =0 Term=1
+
+server 0 and server 2 log is =[{101 0 1} {102 0 1}]
+
+but server 1 is disconnected.
+-------------------------------------------------------------------------
+BACKUP DEBUG
+*******************
+
+SUCCESS
+Leadre=4 term=1
+
+Gets RANDINT and committed on all 5 servers.
+NOW partition starts::
+
+original part  [0,4(L)]                                                       NEW part (1(L),2,3) term=3
+0,4 lOG is [{5972253399320888024 0 1} {999 0 1}]                              [{5972253399320888024 0 1} {2000 0 3}]
+
+New Partition log grows long till 2009 0 3 and test gets passed
+
+********************
+FAIL
+Leader=1 term=1
+
+PART1 (3-L, 4)                               |             PART2 (0, 1-L ,2) term=3
+                                             |
+[{5401380694195380640 0 1} {999 0 1}]        |            [{5401380694195380640 0 1} {2000 0 2} {2001 0 2} {2002 0 2} {2003 0 2} {2004 0 2} {2005 0 2} {2006 0 2} {2007 0 2} {2008 0 2} {2009 0 2}]
+
+
+
+                                                    Leader receives 8596 and Server 2 accepts it. I think 0 is disconnected
+
+
+
+ NEW partition contains (3,4, and 0 ) 0 has most uptodate log
+ Leader(3) having log =[{5401380694195380640 0 1} {999 0 1} {6666 0 1}] -  steps down for follower zero term ( 3 )
+
+4(OLDLEADER) 0       2 ( NEW FOLLOWER )
+
+Electi term  0       2     4
+-------------------------------
+20           20C     20    19   0 lost election
+-------------------------------
+21           21C     20    20   0 lost election
+-------------------------------------------------------
+
+
+
+
+
+
+Leader = 1, term=1
+4553000065531048309 gets replicated on all servers.
+Leader 1 Log before it gets disconnected [{4553000065531048309 0 1} {101 0 1}]
+
+Leader = 0 term = 2 & its log is =[{4553000065531048309 0 1}]
+it log before it gets killed : [{4553000065531048309 0 1} {400 0 2}]
+
+Leader = 2 term = 3 & its log is =[{4553000065531048309 0 1}]
+it log before it gets killed :[{4553000065531048309 0 1} {1402 0 3}]
+
+
+Leader = 1 term = 5 & its log is =[{4553000065531048309 0 1} {101 0 1}] (3,4 gets same log)
+it log before it gets killed :[{4553000065531048309 0 1} {101 0 1} {2301 0 5}]
+
+Leader = 0 term = 7 & its log is =[{4553000065531048309 0 1} {400 0 2}]
+it log before it gets killed :[{4553000065531048309 0 1} {400 0 2} {3800 0 7}]
+
+Leader = 1 term = 9 & its log is =[{4553000065531048309 0 1} {101 0 1} {2301 0 5}]
+it log before it gets killed :[{4553000065531048309 0 1} {101 0 1} {2301 0 5} {6101 0 9}]
+
+Leader = 0 term =11 & its log is =[{4553000065531048309 0 1} {400 0 2} {3800 0 7}]
+it log before it gets killed :[{4553000065531048309 0 1} {400 0 2} {3800 0 7} {7300 0 11}]
+
+Leader = 2 term =13 & its log is =[{4553000065531048309 0 1} {1402 0 3}] ( 3 & 4 replicates them )
+
+ERROR apply error: commit index=2 server=2 1402 != server=1 101
+
+---------------------
+DEBUG impLongFail
+---------------------
+Leader=4 term=1
+4,0 have one partition and log is =[{326740218567895984 0 1} {999 0 1}] -- 999 is not committed
+
+
+1, 2L,3
+Term=3 Leader=2   -------- 1 gets disconnected to join old partition
+1's log : [{326740218567895984 0 1} {2000 0 3} {2001 0 3} {2002 0 3} {2003 0 3} {2004 0 3} {2005 0 3} {2006 0 3} {2007 0 3} {2008 0 3} {2009 0 3}]
+
+--------------------------------------
+---------------------------------------
+
+Leader=3, Term=1
+First RAND got replicated on all servers.
+its log for term=1 before it got killed:: [{4935764064850995981 0 1} ``{103 0 1}``]
+
+Leader=0, Term=2, Votes=1,2,4 ( with log [{4935764064850995981 0 1}]
+its log beofre it gets killed is =[{4935764064850995981 0 1} {1600 0 2}] (1600 is Committed&applied)
+
+Leader=4, Term=3, Votes=1,2 with log [{4935764064850995981 0 1} {1600 0 2}]
+its log before it gets killed is = [{4935764064850995981 0 1} {1600 0 2} {3404 0 3}]
+
+Leader=4, Term=5, Votes=1,2 with log [{4935764064850995981 0 1} {1600 0 2} {3404 0 3}]
+its log before it gets killed is = [{4935764064850995981 0 1} {1600 0 2} {3404 0 3} {10104 0 5}]
+
+Leader=2 Term=6, Votes=1,3 with log [{4935764064850995981 0 1} {1600 0 2}]
+its log before it gets killed is = [{4935764064850995981 0 1} {1600 0 2} {13302 0 6}]
+
+Leader=4 Term=8, Votes=1,3 with log [{4935764064850995981 0 1} {1600 0 2} {3404 0 3} {10104 0 5}]
+its log before it gets killed is =[{4935764064850995981 0 1} {1600 0 2} {3404 0 3} {10104 0 5} {15504 0 8}]
+1&3 has log=  [{4935764064850995981 0 1} {1600 0 2} {3404 0 3} {10104 0 5}]
+
+
+
+Leader=2 Term=10, Votes=1,3 with log [{4935764064850995981 0 1} {1600 0 2} {13302 0 6}]
+its log before it gets killed is =[{4935764064850995981 0 1} {1600 0 2} {13302 0 6} {19002 0 10}]
+1&3 has log =  [{4935764064850995981 0 1} {1600 0 2} {13302 0 6} {10104 0 5}]
+
+
+Leader=3 Term=11, Votes=0,1 with log is [{4935764064850995981 0 1} {1600 0 2} {13302 0 6} {10104 0 5}]
+follower(0) log after inserting all entries=[{4935764064850995981 0 1} {1600 0 2} {13302 0 6} {10104 0 5} {3271400762356006519 0 11}]
+follower(4) log after inserting all entries=[{4935764064850995981 0 1} {1600 0 2} {3404 0 3} {10104 0 5} {3271400762356006519 0 11}]
+
+There is the error :)
+
+---------------------_AFTER FIXING ABOVE ERROR_----------------------------
+---------------------------------------------------------------------------
+
+******iteration=1*******
+
+Leader =2, Term=1, Votes=0,4
+log committed = [{1 0 1} {103 0 1} {100 0 1} {102 0 1} {101 0 1}]
+0,1,3,4 has this same log
+
+******iteration=2*******
+NEW ENTRIES= {2 0 1} {201 0 1} {200 0 1} {203 0 1} {202 0 1} == index 6-10
+
+Leader =2 [{1 0 1} {103 0 1} {100 0 1} {102 0 1} {101 0 1} **** {2 0 1} {201 0 1} {200 0 1} {203 0 1} {202 0 1}]
+
+after receving some more entries
+Leaers log is =[{1 0 1} {103 0 1} {100 0 1} {102 0 1} {101 0 1} {2 0 1} {201 0 1} {200 0 1} {203 0 1} {202 0 1} {3 0 1} {303 0 1} {301 0 1} {302 0 1} {300 0 1}]
+
+
+
+******iteration=4*******
+ Leaers log is =[{1 0 1} {103 0 1} {100 0 1} {102 0 1} {101 0 1} {2 0 1} {201 0 1} {200 0 1} {203 0 1} {202 0 1}
+                {3 0 1} {303 0 1} {301 0 1} {302 0 1} {300 0 1} {4 0 1} {402 0 1} {401 0 1} {400 0 1} {403 0 1}]
+ERROR:::: apply error: commit index=6 server=3 1 != server=4 2
+
+
+----------------------------LAST DEBUG---longfail-------------commitindex---------------------------------------------
+
+Leader=0, term=1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
